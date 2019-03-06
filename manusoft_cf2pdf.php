@@ -27,22 +27,6 @@ function load_manusoft_cf2pdf_admin_script() {
 }
 add_action('admin_enqueue_scripts', 'load_manusoft_cf2pdf_admin_script');
 
-// 'Ajax action' para actualizar la imagen
-function manusoft_cf2pdf_get_image() {
-    if(isset($_GET['id'])) {
-        $image = wp_get_attachment_image(filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT ), 'medium', false, array( 'id' => 'manusoft_cf2pdf_preview_header'));
-        $url = wp_get_attachment_url($_GET['id']);
-        $data = array(
-            'image' => $image,
-            'url' => $url,
-        );
-        wp_send_json_success($data);
-    } else {
-        wp_send_json_error();
-    }
-}
-add_action('wp_ajax_manusoft_cf2pdf_get_image', 'manusoft_cf2pdf_get_image');
-
 // Método a ejecutar al activar el plugin
 register_activation_hook( __FILE__, 'manusoft_cf2pdf_activacion' );
 function manusoft_cf2pdf_activacion() {
@@ -61,6 +45,12 @@ function manusoft_cf2pdf_create_config_table() {
   $charset_collate = $wpdb->get_charset_collate();
   $sql = "CREATE TABLE ".$wpdb->prefix."manusoft_cf2pdf_config (
             id bigint(11) NOT NULL AUTO_INCREMENT,
+            url_img_sup varchar(255) DEFAULT NULL,
+            url_img_lat_sup varchar(255) DEFAULT NULL,
+            url_img_lat_inf varchar(255) DEFAULT NULL,
+            txt_lat varchar(255) DEFAULT NULL,
+            url_img_inf varchar(255) DEFAULT NULL,
+            txt_inf varchar(255) DEFAULT NULL,
             PRIMARY KEY (id)
           ) ".$charset_collate.";";
   require_once( ABSPATH."wp-admin/includes/upgrade.php");

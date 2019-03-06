@@ -8,7 +8,7 @@ add_action( 'admin_menu', 'manusoft_cf2pdf_add_admin_links' );
 function manusoft_cf2pdf_add_admin_links() {
   add_menu_page(
     'CF2PDF - Configuración',                                       // Título de la página
-    'CF2PDF',                                                       // Texto a mostrar como enlace en el menú de administración de WordPress
+    'cf2pdf',                                                       // Texto a mostrar como enlace en el menú de administración de WordPress
     'manage_options',                                               // Permisos requeridos para mostrar el enlace
     plugin_dir_path(__FILE__).'/manusoft_cf2pdf_config_page.php'    // 'Slug' del fichero a mostrar cuando se haga click en el enlace
     //'',
@@ -32,4 +32,20 @@ function manusoft_cf2pdf_add_admin_links() {
     plugin_dir_path(__FILE__).'/manusoft_cf2pdf_forms_page.php'     // 'Slug' del fichero a mostrar cuando se haga click en el enlace del submenú
   );
 }
+
+// 'Ajax action' para actualizar la imagen
+function manusoft_cf2pdf_get_image() {
+    if(isset($_GET['id'])) {
+        $image = wp_get_attachment_image(filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT ), 'medium', false, array( 'id' => 'manusoft_cf2pdf_preview_header'));
+        $url = wp_get_attachment_url($_GET['id']);
+        $data = array(
+            'image' => $image,
+            'url' => $url,
+        );
+        wp_send_json_success($data);
+    } else {
+        wp_send_json_error();
+    }
+}
+add_action('wp_ajax_manusoft_cf2pdf_get_image', 'manusoft_cf2pdf_get_image');
 ?>
