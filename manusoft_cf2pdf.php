@@ -13,10 +13,35 @@ require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions.php';
 
 // Insercción del fichero con CSS privado propio
 function load_manusoft_cf2pdf_admin_style() {
-    wp_register_style('manusoft_cf2pdf_style', plugins_url('/css/manusoft_cf2pdf_admin_style.css', __FILE__));
-    wp_enqueue_style('manusoft_cf2pdf_style');
+  wp_register_style('manusoft_cf2pdf_style', plugins_url('/css/manusoft_cf2pdf_admin_style.css', __FILE__));
+  wp_enqueue_style('manusoft_cf2pdf_style');
+  wp_enqueue_style('thickbox');
 }
 add_action('admin_enqueue_scripts', 'load_manusoft_cf2pdf_admin_style');
+
+// Insercción de ficheros y librerías JavaScript
+function load_manusoft_cf2pdf_admin_script() {
+  wp_enqueue_media();
+  wp_enqueue_script('manusoft_cf2pdf_script', plugins_url('/js/manusoft_cf2pdf_media_upload.js', __FILE__), array('jquery'), '0.1');
+  wp_enqueue_script('manusoft_cf2pdf_script', plugins_url('/js/manusoft_cf2pdf_admin_script.js', __FILE__));
+}
+add_action('admin_enqueue_scripts', 'load_manusoft_cf2pdf_admin_script');
+
+// 'Ajax action' para actualizar la imagen
+function manusoft_cf2pdf_get_image() {
+    if(isset($_GET['id'])) {
+        $image = wp_get_attachment_image(filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT ), 'medium', false, array( 'id' => 'manusoft_cf2pdf_preview_header'));
+        $url = wp_get_attachment_url($_GET['id']);
+        $data = array(
+            'image' => $image,
+            'url' => $url,
+        );
+        wp_send_json_success($data);
+    } else {
+        wp_send_json_error();
+    }
+}
+add_action('wp_ajax_manusoft_cf2pdf_get_image', 'manusoft_cf2pdf_get_image');
 
 // Método a ejecutar al activar el plugin
 register_activation_hook( __FILE__, 'manusoft_cf2pdf_activacion' );

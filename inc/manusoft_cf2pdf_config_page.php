@@ -13,7 +13,20 @@ defined('ABSPATH') or die('No tienes permiso para hacer eso.');
           </h2>
           <div class="inside">
             <p class="post-attributes-label-wrapper">Selecciona la imagen del encabezado de la plantilla PDF:</p>
-            <input type="file" />
+            <div class="manusoft_cf2pdf_header_preview">
+              <?php
+                $image_id = get_option('manusoft_cf2pdf_image_id');
+                if (intval($image_id) > 0) {
+                  echo wp_get_attachment_image($image_id, 'medium', false, array('id'=>'manusoft_cf2pdf_preview_header'));
+                } else {
+                  echo '<img id="manusoft_cf2pdf_preview_header" width="150" height="150" src="'.plugins_url('/images/notfound.png', __DIR__).'" />';
+                }
+              ?>
+            </div>
+            <div class="manusoft_cf2pdf_header_input">
+              <input type="text" name="upload_image" id="manusoft_cf2pdf_upload_image" value="" size='40' />
+              <input type="button" class='button-secondary' id="manusoft_cf2pdf_upload_image_button" value="Subir imagen" />
+            </div>
           </div>
         </div>
         <div class="postbox">
