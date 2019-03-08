@@ -6,8 +6,8 @@ defined('ABSPATH') or die('No tienes permiso para hacer eso.');
   <hr class="wp-header-end">
   <form action="" method="post">
     <div id="poststuff">
-      <div id="postbox-container-cf2pdf-config" class="postbox-container">
-        <div id="side-sortables" class="meta-box-sortables ui-sortable">
+      <div id="post-body" class="columns-2">
+        <div id="postbox-container-2" class="postbox-container">
           <div class="postbox">
             <h2 class="hndle ui-sortable-handle">
               <span>Encabezado</span>

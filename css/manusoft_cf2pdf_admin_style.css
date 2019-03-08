@@ -1,5 +1,11 @@
-#poststuff .inside {
-  margin:auto;
+#manusoft_cf2pdf_config .inside {
+  display: flex;
+  justify-content: center;
+}
+
+#manusoft_cf2pdf_guardar_button input {
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 div .manusoft_cf2pdf_image_preview {
