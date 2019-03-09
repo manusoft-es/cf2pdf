@@ -61,6 +61,8 @@ function manusoft_cf2pdf_refresh_image(id,url_id,image_id) {
     if (response.success === true) {
       jQuery('#'+image_id).replaceWith(response.data.image);
       jQuery('input#'+url_id).val(response.data.url);
+    } else {
+      alert("Algo ha fallado");
     }
   });
 }
