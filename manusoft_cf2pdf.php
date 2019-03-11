@@ -10,7 +10,9 @@ Author URI: https://www.manusoft.es
 defined('ABSPATH') or die('No tienes permiso para hacer eso.');
 
 require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions.php';
+require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_config.php';
 require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_cf7.php';
+require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_forms.php';
 
 // Insercción del fichero con CSS privado propio
 function load_manusoft_cf2pdf_admin_style() {

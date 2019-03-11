@@ -18,7 +18,7 @@ if ($config != NULL) {
 }
 ?>
 <div id="manusoft_cf2pdf_config" class="wrap">
-  <h1 class="wp-heading-inline">CF2PDF - Configuración de la plantilla PDF</h1>
+  <h1 class="wp-heading-inline">CF7 to PDF - Configuración de la plantilla PDF</h1>
   <hr class="wp-header-end">
   <div id="poststuff">
     <span id="manusoft_cf2pdg_messages"></span>
