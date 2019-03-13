@@ -2,17 +2,20 @@
 defined('ABSPATH') or die('No tienes permiso para hacer eso.');
 
 // Método para obtener la lista de formularios del sistema
-function manusoft_cf2pdf_get_all_forms() {
+function manusoft_cf2pdf_get_all_forms($per_page = 5, $page_number = 1) {
   global $wpdb;
+  $offset = ($page_number-1) == 0 ? 0 : ($page_number-1)*$per_page;
   $query = "SELECT
-              form_post_id as form_id,
-              COUNT(form_post_id) as total
-            FROM (
-              SELECT
-                form_post_id
-              FROM ".$wpdb->prefix."manusoft_cf2pdf_data
-            ) data
-            GROUP BY form_post_id";
+              p.ID as id,
+              p.post_title as name,
+              COUNT(data.form_post_id) as total
+            FROM ".$wpdb->prefix."posts p
+            LEFT JOIN ".$wpdb->prefix."manusoft_cf2pdf_data data ON (data.form_post_id = p.ID)
+            WHERE p.post_type = 'wpcf7_contact_form'
+            GROUP BY p.ID
+            ORDER BY name
+            LIMIT ".$per_page."
+            OFFSET ".$offset;
   $results = $wpdb->get_results($query,"ARRAY_A");
   return $results;
 }

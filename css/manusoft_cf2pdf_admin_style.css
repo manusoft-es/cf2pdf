@@ -1,3 +1,9 @@
+/*
+ *
+ *  CONFIGURACIÓN
+ *
+ */
+
 #manusoft_cf2pdf_config .inside {
   padding-left:5%;
   padding-right:5%;
@@ -41,4 +47,15 @@ div .manusoft_cf2pdf_image_input {
 
 #manusoft_cf2pdf_footer_textarea {
   width:55%;
+}
+/* ########################################################################## */
+
+/*
+ *
+ *  FORMULARIOS
+ *
+ */
+
+#manusoft_cf2pdf_form_name {
+  width:80%;
 }

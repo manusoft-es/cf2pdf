@@ -13,6 +13,7 @@ require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions.php';
 require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_config.php';
 require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_cf7.php';
 require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_forms.php';
+require_once plugin_dir_path(__FILE__).'class/manusoft_cf2pdf_forms_class.php';
 
 // Insercción del fichero con CSS privado propio
 function load_manusoft_cf2pdf_admin_style() {
