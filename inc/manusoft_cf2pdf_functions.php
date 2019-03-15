@@ -31,5 +31,13 @@ function manusoft_cf2pdf_add_admin_links() {
     'manage_options',                                             // Permisos requeridos para mostrar el enlace
     plugin_dir_path(__FILE__).'/manusoft_cf2pdf_config_page.php'  // 'Slug' del fichero a mostrar cuando se haga click en el enlace del submenú
   );
+
+  add_submenu_page(
+    '',                                                           // 'Slug' del menú del que cuelga el submenú
+    'CF7 to PDF - Registros',                                     // Texto a mostrar en la etiqueta 'title' del enlace
+    '',                                                           // Texto a mostrar como enlace en el menú de administración de WordPress
+    'manage_options',                                             // Permisos requeridos para mostrar el enlace
+    plugin_dir_path(__FILE__).'/manusoft_cf2pdf_data_page.php'    // 'Slug' del fichero a mostrar cuando se haga click en el enlace del submenú
+  );
 }
 ?>

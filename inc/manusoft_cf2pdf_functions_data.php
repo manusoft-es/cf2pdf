@@ -1,0 +1,48 @@
+<?php
+defined('ABSPATH') or die('No tienes permiso para hacer eso.');
+
+function manusoft_cf2pdf_get_data($form_id, $per_page = 5, $page_number = 1) {
+  global $wpdb;
+  $offset = ($page_number-1) == 0 ? 0 : ($page_number-1)*$per_page;
+  $query = "SELECT *
+            FROM ".$wpdb->prefix."manusoft_cf2pdf_data
+            WHERE form_post_id = '".$form_id."'
+            ORDER BY form_date DESC
+            LIMIT ".$per_page."
+            OFFSET ".$offset;
+  $datas = $wpdb->get_results($query,"ARRAY_A");
+
+  $results = [];
+  foreach ($datas as $data) {
+    $result = [];
+    $result['form_id'] = $data['form_id'];
+    $values = maybe_unserialize($data['form_value']);
+    foreach ($values as $value) {
+      $index = array_search($value,$values);
+      $result[$index] = $value;
+    }
+    $result['form_date'] = date('d/m/Y H:i',strtotime($data['form_date']));
+    array_push($results,$result);
+  }
+  return $results;
+}
+
+function manusoft_cf2pdf_get_indexes($form_id) {
+  global $wpdb;
+  $query = "SELECT
+              form_value
+            FROM ".$wpdb->prefix."manusoft_cf2pdf_data
+            WHERE form_post_id = '".$form_id."'
+            LIMIT 1;";
+  $result = maybe_unserialize($wpdb->get_row($query,"ARRAY_A")['form_value']);
+  $indexes = array_keys($result);
+  return $indexes;
+}
+
+function manusoft_cf2pdf_count_data($form_id) {
+  global $wpdb;
+  $query = "SELECT COUNT(1) FROM ".$wpdb->prefix."manusoft_cf2pdf_data WHERE form_post_id = '".$form_id."';";
+  return $wpdb->get_var($query);
+}
+
+?>

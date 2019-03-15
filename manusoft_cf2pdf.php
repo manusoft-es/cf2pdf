@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Contact Form to PDF
-Plugin URI: https://www.manusoft.es
-Description: Plugin para convertir registros de Contact Form 7 a PDF - ManuSoft.es
+Plugin URI: https://github.com/manusoft-es/manusoft-cf2pdf
+Description: Plugin para convertir registros de Contact Form 7 a PDF
 Version: 1.0
-Author: Manu Cabello
+Author: ManuSoft.es
 Author URI: https://www.manusoft.es
 */
 defined('ABSPATH') or die('No tienes permiso para hacer eso.');
@@ -13,7 +13,9 @@ require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions.php';
 require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_config.php';
 require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_cf7.php';
 require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_forms.php';
+require_once plugin_dir_path(__FILE__).'inc/manusoft_cf2pdf_functions_data.php';
 require_once plugin_dir_path(__FILE__).'class/manusoft_cf2pdf_forms_class.php';
+require_once plugin_dir_path(__FILE__).'class/manusoft_cf2pdf_data_class.php';
 
 // Insercción del fichero con CSS privado propio
 function load_manusoft_cf2pdf_admin_style() {

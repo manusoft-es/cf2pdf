@@ -21,7 +21,6 @@ function manusoft_cf2pdf_before_send_mail( $form_tag ) {
                       );
     $data = $form->get_posted_data();
     $form_data = array();
-    $form_data['manusoft_cf2pdf_status'] = 'unread';
     foreach ($data as $key => $d) {
       if (!in_array($key,$black_list)) {
         $tmpD = $d;

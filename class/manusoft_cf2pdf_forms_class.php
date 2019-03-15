@@ -63,7 +63,7 @@ class manusoft_cf2pdf_forms_list_table extends WP_List_Table {
   function column_default($item,$column_name) {
     switch ($column_name) {
       case 'manusoft_cf2pdf_form_name':
-        return '<b><a href="">'.$item['name'].'</a></b>';
+        return '<b><a href="?id='.$item['id'].'&page=manusoft-cf2pdf/inc/manusoft_cf2pdf_data_page.php">'.$item['name'].'</a></b>';
       case 'manusoft_cf2pdf_form_total':
         return $item['total'];
       default:
