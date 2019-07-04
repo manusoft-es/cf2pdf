@@ -17,9 +17,9 @@ function manusoft_cf2pdf_get_data($form_id, $per_page = 5, $page_number = 1) {
     $result = [];
     $result['form_id'] = $data['form_id'];
     $values = maybe_unserialize($data['form_value']);
-    foreach ($values as $value) {
-      $index = array_search($value,$values);
-      $result[$index] = $value;
+    $indexes = array_keys($values);
+    foreach ($indexes as $index) {
+      $result[$index] = $values[$index];
     }
     $result['form_date'] = date('d/m/Y H:i',strtotime($data['form_date']));
     array_push($results,$result);
@@ -35,7 +35,11 @@ function manusoft_cf2pdf_get_indexes($form_id) {
             WHERE form_post_id = '".$form_id."'
             LIMIT 1;";
   $result = maybe_unserialize($wpdb->get_row($query,"ARRAY_A")['form_value']);
-  $indexes = array_keys($result);
+  if ($result != null) {
+    $indexes = array_keys($result);
+  } else {
+    $indexes = [];
+  }
   return $indexes;
 }
 
