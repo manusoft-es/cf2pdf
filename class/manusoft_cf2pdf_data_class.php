@@ -18,7 +18,9 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
     $columns['cb'] = '<input type="checkbox" />';
     $columns['id'] = '<b>#</b>';
     foreach (manusoft_cf2pdf_get_indexes($_GET['id']) as $index) {
-      $columns[$index] = '<b>'.str_replace("your-","",$index).'</b>';
+      if (strpos($index,"-attachment") === false && strpos($index,"-inline") === false) {
+        $columns[$index] = '<b>'.str_replace("your-","",$index).'</b>';
+      }
     }
     $columns['download'] = '<b>Descargar</b>';
     return $columns;
@@ -73,7 +75,11 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
         $_SESSION['form_title'] = get_the_title($_GET['id']);
         return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
       case $column_name:
-        return $item[$column_name];
+        if (is_array($item[$column_name])) {
+          return implode(",",$item[$column_name]);
+        } else {
+          return $item[$column_name];
+        }
       default:
         return print_r($item,true); //Show the whole array for troubleshooting purposes
     }

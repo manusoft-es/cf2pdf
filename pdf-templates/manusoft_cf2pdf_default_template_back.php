@@ -104,29 +104,37 @@ if (isset($_SESSION['start'])) {
               <td id="form_title" colspan="2"><strong><?php echo $form_title; ?></strong></td>
             </tr>
           <?php foreach (array_keys($form_data) as $index) {
-                  if ($index != 'form_id' && $index != "form_date" && strpos($index,"-attachment") === false && strpos($index,"-inline") === false) { ?>
+                  if ($index != 'form_id' && $index != "form_date") { ?>
             <tr>
               <th><?php echo str_replace("your-","",$index); ?></th>
-              <td>
-          <?php if (is_array($form_data[$index])) {
-                  echo implode(",",$form_data[$index]);
-                } else {
-                  if (preg_match("/^((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))$/",str_replace("&#047;", "/", $form_data[$index]))) {
-                    if (strpos($form_data[$index],".png") === false) {
-                      echo $form_data[$index];
-                    } else {
-                      if (file_exists($form_data[$index])) {
-                        echo "<img src='".str_replace("&#047;", "/", $form_data[$index])."' />";
-                      } else {
-                        echo "ERROR - Archivo no encontrado";
-                      }
-                    }
-                  } else {
-                    echo $form_data[$index];
-                  }
-                }
-          ?>
-              </td>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
+            </tr><tr>
+              <th><?php echo str_replace("your-","",$index); ?></th>
+              <td><?php echo $form_data[$index]; ?></td>
             </tr>
           <?php   }
                 } ?>
@@ -141,7 +149,7 @@ if (isset($_SESSION['start'])) {
     $html2pdf->setDefaultFont('Arial');
     $html2pdf->writeHTML($content);
     ob_end_clean();
-    $html2pdf->output($form_title.'.pdf');
+    $html2pdf->output('test.pdf');
   } catch (Html2PdfException $e) {
     $html2pdf->clean();
     $formatter = new ExceptionFormatter($e);

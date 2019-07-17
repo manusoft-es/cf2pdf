@@ -33,6 +33,7 @@ function manusoft_cf2pdf_get_indexes($form_id) {
               form_value
             FROM ".$wpdb->prefix."manusoft_cf2pdf_data
             WHERE form_post_id = '".$form_id."'
+            ORDER BY form_id DESC
             LIMIT 1;";
   $result = maybe_unserialize($wpdb->get_row($query,"ARRAY_A")['form_value']);
   if ($result != null) {

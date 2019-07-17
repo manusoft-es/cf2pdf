@@ -30,4 +30,12 @@ function manusoft_cf2pdf_get_form_data($form_id) {
   $results = $wpdb->get_results($query,"ARRAY_A");
   return $results;
 }
+
+// Método para obtener el html de un formulario cuyo ID se pasa como parámetro
+function manusoft_cf2pdf_get_form_html($form_id) {
+  global $wpdb;
+  $query = "SELECT meta_value FROM ".$wpdb->prefix."postmeta WHERE post_id = ".$form_id." AND meta_key = '_form';";
+  $result = $wpdb->get_var($query);
+  return $result;
+}
 ?>
