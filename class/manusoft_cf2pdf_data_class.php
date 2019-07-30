@@ -64,26 +64,30 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
       );
   }
 
-  function column_default($item,$column_name) {
-    switch ($column_name) {
-      case 'id':
-        return $item['form_id'];
-      case 'download':
-        //return '<a href="?page=manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php">Descargar en PDF</a>';
-        $_SESSION['start'] = "1";
-        $_SESSION['data'][$item['form_id']] = $item;
-        $_SESSION['form_title'] = get_the_title($_GET['id']);
-        return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
-      case $column_name:
-        if (is_array($item[$column_name])) {
-          return implode(",",$item[$column_name]);
-        } else {
-          return $item[$column_name];
+    function column_default($item,$column_name) {
+        switch ($column_name) {
+            case 'id':
+                return $item['form_id'];
+            case 'download':
+                //return '<a href="?page=manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php">Descargar en PDF</a>';
+                $_SESSION['start'] = "1";
+                $_SESSION['data'][$item['form_id']] = $item;
+                $_SESSION['form_title'] = get_the_title($_GET['id']);
+                return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
+            case $column_name:
+                if (is_array($item[$column_name])) {
+                    return implode(",",$item[$column_name]);
+                } else {
+                    if (preg_match("/^((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))$/",str_replace("&#047;", "/", $item[$column_name]))) {
+                        return '<a target="_blank" href="'.str_replace("&#047;", "/", $item[$column_name]).'">Ver enlace</a>';
+                    } else {
+                        return $item[$column_name];
+                    }
+                }
+                default:
+                    return print_r($item,true); //Show the whole array for troubleshooting purposes
         }
-      default:
-        return print_r($item,true); //Show the whole array for troubleshooting purposes
     }
-  }
 
 }
 ?>

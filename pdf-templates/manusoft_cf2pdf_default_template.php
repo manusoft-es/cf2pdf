@@ -64,6 +64,10 @@ if (isset($_SESSION['start'])) {
       td {
         width: 80%;
       }
+      .img_form {
+        margin-left: 25%;
+        width: 27%;
+      }
       .pie {
         width: 80%;
         margin-left: 10%;
@@ -113,13 +117,9 @@ if (isset($_SESSION['start'])) {
                 } else {
                   if (preg_match("/^((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))$/",str_replace("&#047;", "/", $form_data[$index]))) {
                     if (strpos($form_data[$index],".png") === false) {
-                      echo $form_data[$index];
+                        echo $form_data[$index];
                     } else {
-                      if (file_exists($form_data[$index])) {
-                        echo "<img src='".str_replace("&#047;", "/", $form_data[$index])."' />";
-                      } else {
-                        echo "ERROR - Archivo no encontrado";
-                      }
+                        echo "<img class='img_form' src='".str_replace("&#047;","/",$form_data[$index])."' />";
                     }
                   } else {
                     echo $form_data[$index];
