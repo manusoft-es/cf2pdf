@@ -19,7 +19,7 @@ jQuery(document).ready( function($) {
       footer_text:footer_text
     };
     jQuery.get(ajaxurl,data,function(response) {
-      if (response.success === true) {
+      if (response.data.result !== false) {
         alert("La configuración se ha guardado correctamente.");
         //jQuery('#manusoft_cf2pdg_messages').val("La configuración se ha guardado correctamente.");
       } else {

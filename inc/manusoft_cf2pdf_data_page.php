@@ -10,8 +10,9 @@ if (!current_user_can('manage_options'))  {
   <h1 class="wp-heading-inline">CF7 to PDF - Registros</h1>
   <hr class="wp-header-end">
   <div id="poststuff">
-    <span id="manusoft_cf2pdg_messages"></span>
+    <span id="manusoft_cf2pdf_messages"></span>
     <?php
+      echo var_dump(manusoft_cf2pdf_get_cofig_data());
       $DataListTable->display();
     ?>
   </div>

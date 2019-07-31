@@ -73,6 +73,12 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
                 $_SESSION['start'] = "1";
                 $_SESSION['data'][$item['form_id']] = $item;
                 $_SESSION['form_title'] = get_the_title($_GET['id']);
+                $config = manusoft_cf2pdf_get_cofig_data();
+                if ($config != NULL) {
+                    foreach ($config as $key => $value) {
+                        $_SESSION['config'][$key] = $value;
+                    }
+                }
                 return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
             case $column_name:
                 if (is_array($item[$column_name])) {
