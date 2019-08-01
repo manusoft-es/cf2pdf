@@ -89,7 +89,7 @@ if ($config != NULL) {
                 <tr>
                   <td colspan="2" id="manusoft_cf2pdf_lateral_txt">
                     <p class="post-attributes-label-wrapper"><b>Introduce el texto del lateral de la plantilla PDF:</b></p>
-                    <textarea id="manusoft_cf2pdf_lateral_text" name="lateral_text" rows="5" style="width:100%;"><?php echo $lateral_text; ?></textarea>
+                    <textarea id="manusoft_cf2pdf_lateral_text" name="lateral_text" rows="5" maxlength="520" style="width:100%;"><?php echo $lateral_text; ?></textarea>
                   </td>
                 </tr>
               </table>
@@ -118,7 +118,7 @@ if ($config != NULL) {
                   </td>
                   <td id="manusoft_cf2pdf_footer_textarea">
                     <p class="post-attributes-label-wrapper"><b>Introduce el texto del pie de la plantilla PDF:</b></p>
-                    <textarea id="manusoft_cf2pdf_footer_text" name="footer_text" rows="5" style="width:100%;"><?php echo $footer_text; ?></textarea>
+                    <textarea id="manusoft_cf2pdf_footer_text" name="footer_text" rows="5" maxlength="880" style="width:100%;"><?php echo $footer_text; ?></textarea>
                   </td>
                 </tr>
               </table>

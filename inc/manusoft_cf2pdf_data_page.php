@@ -12,7 +12,6 @@ if (!current_user_can('manage_options'))  {
   <div id="poststuff">
     <span id="manusoft_cf2pdf_messages"></span>
     <?php
-      echo var_dump(manusoft_cf2pdf_get_cofig_data());
       $DataListTable->display();
     ?>
   </div>
