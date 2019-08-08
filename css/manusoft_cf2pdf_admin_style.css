@@ -1,0 +1,61 @@
+/*
+ *
+ *  CONFIGURACIÓN
+ *
+ */
+
+#manusoft_cf2pdf_config .inside {
+  padding-left:5%;
+  padding-right:5%;
+  //display:flex;
+  //justify-content:center;
+}
+
+#manusoft_cf2pdf_config #manusoft_cf2pdf_guardar .inside {
+  text-align:center;
+}
+
+#manusoft_cf2pdf_guardar_button {
+  margin-top:5%;
+  margin-bottom:5%;
+}
+
+#manusoft_cf2pdf_config input[type=text] {
+  width:300px;
+}
+
+div .manusoft_cf2pdf_image_preview {
+  margin-top:1%;
+}
+
+div .manusoft_cf2pdf_image_input {
+  margin-top:1%;
+}
+
+#manusoft_cf2pdf_footer {
+  //padding-left:5%;
+  //padding-right:5%;
+}
+
+#manusoft_cf2pdf_config table {
+  width:100%;
+}
+
+#manusoft_cf2pdf_footer_image {
+  width:35%;
+}
+
+#manusoft_cf2pdf_footer_textarea {
+  width:55%;
+}
+/* ########################################################################## */
+
+/*
+ *
+ *  FORMULARIOS
+ *
+ */
+
+#manusoft_cf2pdf_form_name {
+  width:80%;
+}

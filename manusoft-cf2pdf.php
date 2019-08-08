@@ -12,6 +12,14 @@ defined('ABSPATH') or die('No tienes permiso para hacer eso.');
 require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_functions.php';
 require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_config_functions.php';
 
+// Insercción del fichero con CSS privado propio
+function load_manusoft_cf2pdf_admin_style() {
+    wp_register_style('manusoft_cf2pdf_style', plugins_url('/css/manusoft_cf2pdf_admin_style.css', __FILE__));
+    wp_enqueue_style('manusoft_cf2pdf_style');
+    wp_enqueue_style('thickbox');
+}
+add_action('admin_enqueue_scripts', 'load_manusoft_cf2pdf_admin_style');
+
 // Insercción de ficheros y librerías JavaScript
 function load_manusoft_cf2pdf_admin_script() {
     wp_enqueue_media();

@@ -14,7 +14,7 @@ if (check_initial_config()) {
 	<h1 class="wp-heading-inline">CF7 to PDF - Configuración</h1>
 	<hr class="wp-header-end">
 	<div id="poststuff">
-		<span id="manusoft_cf2pdg_messages"></span>
+		<span id="manusoft_cf2pdf_messages"></span>
 		<div id="post-body" class="columns-2">
 			<div id="postbox-container-1" class="postbox-container">
 				<div id="manusoft_cf2pdf_guardar" class="postbox">
@@ -98,7 +98,7 @@ if (check_initial_config()) {
 						<div style="width:100%;">
 							<table>
 								<tr>
-									<td id="manusoft_cf2pdf_footer_textarea">
+									<td colspan="2" id="manusoft_cf2pdf_footer_textarea">
 										<p class="post-attributes-label-wrapper"><b>Introduce el texto del pie de la plantilla PDF:</b></p>
 										<textarea id="manusoft_cf2pdf_footer_text" name="footer_text" rows="5" maxlength="880" style="width:100%;"><?php echo $footer_text; ?></textarea>
 									</td>
@@ -122,6 +122,7 @@ if (check_initial_config()) {
 								</th>
 								<td>
 									<input type="text" id="nombre_grupo" name="nombre_grupo" class="regular-text" value="<?php echo $config_data['nombre_grupo']; ?>" />
+									<span id="manusoft_cf2pdf_nombre_grupo_messages"></span>
 								</td>
 							</tr>
 							<tr>
@@ -130,6 +131,7 @@ if (check_initial_config()) {
 								</th>
 								<td>
 									<input type="text" id="cif_grupo" name="cif_grupo" maxlength="9" size="9" class="regular-text" value="<?php echo $config_data['cif_grupo']; ?>" />
+									<span id="manusoft_cf2pdf_cif_grupo_messages"></span>
 									<p class="description" id="cif_grupo-description"><small>El CIF debe estar formado por una letra (A,B,C,D,E,F,G,H,J,K,L,M,N,P,Q,R,S,U,V,W) seguida de 7 dígitos y por otra letra (de la A a la J) o número al final. (Ejemplo: A1234567B o A12345678)</small></p>
 								</td>
 							</tr>
@@ -139,6 +141,7 @@ if (check_initial_config()) {
 								</th>
 								<td>
 									<input type="email" id="email_grupo" name="email_grupo" class="regular-text ltr" value="<?php echo $config_data['email_grupo']; ?>" />
+									<span id="manusoft_cf2pdf_email_grupo_messages"></span>
 								</td>
 							</tr>
 							<tr>
@@ -147,6 +150,7 @@ if (check_initial_config()) {
 								</th>
 								<td>
 									<textarea id="direccion_grupo" name="direccion_grupo" rows="3" cols="40" maxlength="255" class="code"><?php echo $config_data['direccion_grupo']; ?></textarea>
+									<span id="manusoft_cf2pdf_direccion_grupo_messages"></span>
 								</td>
 							</tr>
 							<tr>
@@ -155,6 +159,7 @@ if (check_initial_config()) {
 								</th>
 								<td>
 									<input type="text" id="poblacion_grupo" name="poblacion_grupo" class="regular-text" value="<?php echo $config_data['poblacion_grupo']; ?>" />
+									<span id="manusoft_cf2pdf_poblacion_grupo_messages"></span>
 								</td>
 							</tr>
 							<tr>
@@ -163,6 +168,7 @@ if (check_initial_config()) {
 								</th>
 								<td>
 									<input type="text" id="provincia_grupo" name="provincia_grupo" class="regular-text" value="<?php echo $config_data['provincia_grupo']; ?>" />
+									<span id="manusoft_cf2pdf_provincia_grupo_messages"></span>
 								</td>
 							</tr>
 							<tr>
@@ -170,7 +176,8 @@ if (check_initial_config()) {
 									<label for="cp_grupo">Código postal</label>
 								</th>
 								<td>
-									<input type="text" id="cp_grupo" name="cp_grupo" maxlength="6" size="6" class="regular-text" value="<?php echo $config_data['cp_grupo']; ?>" />
+									<input type="text" id="cp_grupo" name="cp_grupo" maxlength="5" size="5" class="regular-text" value="<?php echo $config_data['cp_grupo']; ?>" />
+									<span id="manusoft_cf2pdf_cp_grupo_messages"></span>
 								</td>
 							</tr>
 						</table>
