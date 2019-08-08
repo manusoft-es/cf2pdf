@@ -2,6 +2,13 @@
 defined('ABSPATH') or die('No tienes permiso para hacer eso.');
 
 $config_data = manusoft_cf2pdf_get_cofig_data();
+if (check_initial_config()) {
+    $config['url_img_sup'] != "" ? $header_url = $config['url_img_sup'] : $header_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
+    $config['url_img_lat_sup'] != "" ? $lateral_sup_url = $config['url_img_lat_sup'] : $lateral_sup_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
+    $config['url_img_lat_inf'] != "" ? $lateral_inf_url = $config['url_img_lat_inf'] : $lateral_inf_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
+    $lateral_text = $config['txt_lat'];
+    $footer_text = $config['txt_inf'];
+}
 ?>
 <div id="manusoft_cf2pdf_config" class="wrap">
 	<h1 class="wp-heading-inline">CF7 to PDF - Configuración</h1>
@@ -23,10 +30,81 @@ $config_data = manusoft_cf2pdf_get_cofig_data();
 			<div id="postbox-container-2" class="postbox-container">
 				<div class="postbox">
 					<h2 class="hndle ui-sortable-handle">
-						<span>Configuración de la plantilla general</span>
+						<span>Encabezado</span>
 					</h2>
-					<div id="manusoft_cf2pdf_plantilla" class="inside">
-						TEST
+					<div id="manusoft_cf2pdf_header" class="inside">
+						<div>
+							<p class="post-attributes-label-wrapper"><b>Selecciona la imagen del encabezado de la plantilla PDF:</b></p>
+							<div class="manusoft_cf2pdf_image_preview">
+							<?php
+                                echo '<img id="manusoft_cf2pdf_header_preview" width="150" height="150" src="'.$header_url.'" />';
+				            ?>
+							</div>
+							<div class="manusoft_cf2pdf_image_input">
+								<input type="text" name="header_url" id="manusoft_cf2pdf_header_url" value="<?php if ($config['url_img_sup'] != "") { echo $header_url; } ?>" />
+								<input type="button" class="button-secondary" id="manusoft_cf2pdf_header_button" value="Subir imagen" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="postbox">
+					<h2 class="hndle ui-sortable-handle">
+						<span>Lateral</span>
+					</h2>
+					<div id="manusoft_cf2pdf_lateral" class="inside">
+						<div style="width:100%;">
+							<table>
+								<tr>
+									<td id="manusoft_cf2pdf_lateral_sup_image">
+										<p class="post-attributes-label-wrapper"><b>Selecciona la imagen superior del lateral de la plantilla PDF:</b></p>
+											<div class="manusoft_cf2pdf_image_preview">
+											<?php
+                                                echo '<img id="manusoft_cf2pdf_lateral_sup_preview" width="150" height="150" src="'.$lateral_sup_url.'" />';
+                                            ?>
+											</div>
+											<div class="manusoft_cf2pdf_image_input">
+												<input type="text" name="lateral_sup_url" id="manusoft_cf2pdf_lateral_sup_url" value="<?php if ($config['url_img_lat_sup'] != "") { echo $lateral_sup_url; } ?>" />
+												<input type="button" class="button-secondary" id="manusoft_cf2pdf_lateral_sup_button" value="Subir imagen" />
+											</div>
+									</td>
+									<td id="manusoft_cf2pdf_lateral_inf_image">
+										<p class="post-attributes-label-wrapper"><b>Selecciona la imagen inferior del lateral de la plantilla PDF:</b></p>
+										<div class="manusoft_cf2pdf_image_preview">
+										<?php
+                                            echo '<img id="manusoft_cf2pdf_lateral_inf_preview" width="150" height="150" src="'.$lateral_inf_url.'" />';
+                                        ?>
+										</div>
+										<div class="manusoft_cf2pdf_image_input">
+											<input type="text" name="lateral_inf_url" id="manusoft_cf2pdf_lateral_inf_url" value="<?php if ($config['url_img_lat_inf'] != "") { echo $lateral_inf_url; } ?>"/>
+											<input type="button" class="button-secondary" id="manusoft_cf2pdf_lateral_inf_button" value="Subir imagen" />
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" id="manusoft_cf2pdf_lateral_txt">
+										<p class="post-attributes-label-wrapper"><b>Introduce el texto del lateral de la plantilla PDF:</b></p>
+										<textarea id="manusoft_cf2pdf_lateral_text" name="lateral_text" rows="5" maxlength="520" style="width:100%;"><?php echo $lateral_text; ?></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="postbox">
+					<h2 class="hndle ui-sortable-handle">
+						<span>Pie</span>
+					</h2>
+					<div id="manusoft_cf2pdf_footer" class="inside">
+						<div style="width:100%;">
+							<table>
+								<tr>
+									<td id="manusoft_cf2pdf_footer_textarea">
+										<p class="post-attributes-label-wrapper"><b>Introduce el texto del pie de la plantilla PDF:</b></p>
+										<textarea id="manusoft_cf2pdf_footer_text" name="footer_text" rows="5" maxlength="880" style="width:100%;"><?php echo $footer_text; ?></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -52,6 +130,7 @@ $config_data = manusoft_cf2pdf_get_cofig_data();
 								</th>
 								<td>
 									<input type="text" id="cif_grupo" name="cif_grupo" maxlength="9" size="9" class="regular-text" value="<?php echo $config_data['cif_grupo']; ?>" />
+									<p class="description" id="cif_grupo-description"><small>El CIF debe estar formado por una letra (A,B,C,D,E,F,G,H,J,K,L,M,N,P,Q,R,S,U,V,W) seguida de 7 dígitos y por otra letra (de la A a la J) o número al final. (Ejemplo: A1234567B o A12345678)</small></p>
 								</td>
 							</tr>
 							<tr>
@@ -91,7 +170,7 @@ $config_data = manusoft_cf2pdf_get_cofig_data();
 									<label for="cp_grupo">Código postal</label>
 								</th>
 								<td>
-									<input type="text" id="cp_grupo" name="cp_grupo" class="regular-text" value="<?php echo $config_data['cp_grupo']; ?>" />
+									<input type="text" id="cp_grupo" name="cp_grupo" maxlength="6" size="6" class="regular-text" value="<?php echo $config_data['cp_grupo']; ?>" />
 								</td>
 							</tr>
 						</table>

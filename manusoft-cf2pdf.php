@@ -15,6 +15,7 @@ require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_config_fun
 // Insercción de ficheros y librerías JavaScript
 function load_manusoft_cf2pdf_admin_script() {
     wp_enqueue_media();
+    wp_enqueue_script('manusoft_cf2pdf_media_js', plugins_url('/js/manusoft_cf2pdf_media_upload.js', __FILE__), array('jquery'), '0.1');
     wp_enqueue_script('manusoft_cf2pdf_config_js', plugins_url('/js/manusoft_cf2pdf_config_script.js', __FILE__));
 }
 add_action('admin_enqueue_scripts', 'load_manusoft_cf2pdf_admin_script');
