@@ -12,6 +12,15 @@ jQuery(document).ready( function($) {
 	    var provincia_grupo = jQuery('#provincia_grupo').val();
 	    var cp_grupo = jQuery('#cp_grupo').val();
 	    
+	    var config_inicial = jQuery('#config_inicial').val();
+	    if (config_inicial == "1") {
+		    var header_url = jQuery('#manusoft_cf2pdf_header_url').val();
+		    var lateral_sup_url = jQuery('#manusoft_cf2pdf_lateral_sup_url').val();
+		    var lateral_inf_url = jQuery('#manusoft_cf2pdf_lateral_inf_url').val();
+		    var lateral_text = jQuery('#manusoft_cf2pdf_lateral_text').val();
+		    var footer_text = jQuery('#manusoft_cf2pdf_footer_text').val();
+	    }
+	    
 	    var html_message = "";
     	jQuery('#manusoft_cf2pdf_nombre_grupo_messages').html("");
     	jQuery('#manusoft_cf2pdf_cif_grupo_messages').html("");
@@ -83,16 +92,35 @@ jQuery(document).ready( function($) {
 	    }
 	    
 	    if (check_data) {
-	    	var data = {
-	    			action:'manusoft_cf2pdf_save_config',
-	    			nombre_grupo:nombre_grupo,
-	    			cif_grupo:cif_grupo,
-	    			email_grupo:email_grupo,
-	    			direccion_grupo:direccion_grupo,
-	    			poblacion_grupo:poblacion_grupo,
-	    			provincia_grupo:provincia_grupo,
-	    			cp_grupo:cp_grupo
-	    	};
+		    if (config_inicial == "1") {
+		    	var data = {
+		    			action:'manusoft_cf2pdf_save_config',
+		    			nombre_grupo:nombre_grupo,
+		    			cif_grupo:cif_grupo,
+		    			email_grupo:email_grupo,
+		    			direccion_grupo:direccion_grupo,
+		    			poblacion_grupo:poblacion_grupo,
+		    			provincia_grupo:provincia_grupo,
+		    			cp_grupo:cp_grupo,
+		    			
+		    			header_url:header_url,
+	    				lateral_sup_url:lateral_sup_url,
+	    				lateral_inf_url:lateral_inf_url,
+	    				lateral_text:lateral_text,
+	    				footer_text:footer_text
+		    	};
+		    } else {
+		    	var data = {
+		    			action:'manusoft_cf2pdf_save_config',
+		    			nombre_grupo:nombre_grupo,
+		    			cif_grupo:cif_grupo,
+		    			email_grupo:email_grupo,
+		    			direccion_grupo:direccion_grupo,
+		    			poblacion_grupo:poblacion_grupo,
+		    			provincia_grupo:provincia_grupo,
+		    			cp_grupo:cp_grupo
+		    	};
+		    }
 		    
 		    jQuery.get(ajaxurl,data,function(response) {
 	    		if (response.data.result !== false) {

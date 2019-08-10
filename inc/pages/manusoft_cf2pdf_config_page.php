@@ -3,11 +3,11 @@ defined('ABSPATH') or die('No tienes permiso para hacer eso.');
 
 $config_data = manusoft_cf2pdf_get_cofig_data();
 if (check_initial_config()) {
-    $config['url_img_sup'] != "" ? $header_url = $config['url_img_sup'] : $header_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
-    $config['url_img_lat_sup'] != "" ? $lateral_sup_url = $config['url_img_lat_sup'] : $lateral_sup_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
-    $config['url_img_lat_inf'] != "" ? $lateral_inf_url = $config['url_img_lat_inf'] : $lateral_inf_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
-    $lateral_text = $config['txt_lat'];
-    $footer_text = $config['txt_inf'];
+    $config_data['url_img_sup'] != "" ? $header_url = $config_data['url_img_sup'] : $header_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
+    $config_data['url_img_lat_sup'] != "" ? $lateral_sup_url = $config_data['url_img_lat_sup'] : $lateral_sup_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
+    $config_data['url_img_lat_inf'] != "" ? $lateral_inf_url = $config_data['url_img_lat_inf'] : $lateral_inf_url = plugins_url('/manusoft-cf2pdf/images/notfound.png');
+    $lateral_text = $config_data['txt_lat'];
+    $footer_text = $config_data['txt_inf'];
 }
 ?>
 <div id="manusoft_cf2pdf_config" class="wrap">
@@ -27,6 +27,7 @@ if (check_initial_config()) {
 				</div>
 			</div>
 		<?php if (check_initial_config()) { ?>
+			<input type="hidden" name="config_inicial" id="config_inicial" value="1" />
 			<div id="postbox-container-2" class="postbox-container">
 				<div class="postbox">
 					<h2 class="hndle ui-sortable-handle">
@@ -36,12 +37,10 @@ if (check_initial_config()) {
 						<div>
 							<p class="post-attributes-label-wrapper"><b>Selecciona la imagen del encabezado de la plantilla PDF:</b></p>
 							<div class="manusoft_cf2pdf_image_preview">
-							<?php
-                                echo '<img id="manusoft_cf2pdf_header_preview" width="150" height="150" src="'.$header_url.'" />';
-				            ?>
+								<img id="manusoft_cf2pdf_header_preview" width="150" src="<?php echo $header_url; ?>" />
 							</div>
 							<div class="manusoft_cf2pdf_image_input">
-								<input type="text" name="header_url" id="manusoft_cf2pdf_header_url" value="<?php if ($config['url_img_sup'] != "") { echo $header_url; } ?>" />
+								<input type="text" name="header_url" id="manusoft_cf2pdf_header_url" value="<?php if ($config_data['url_img_sup'] != "") { echo $header_url; } ?>" />
 								<input type="button" class="button-secondary" id="manusoft_cf2pdf_header_button" value="Subir imagen" />
 							</div>
 						</div>
@@ -58,24 +57,20 @@ if (check_initial_config()) {
 									<td id="manusoft_cf2pdf_lateral_sup_image">
 										<p class="post-attributes-label-wrapper"><b>Selecciona la imagen superior del lateral de la plantilla PDF:</b></p>
 											<div class="manusoft_cf2pdf_image_preview">
-											<?php
-                                                echo '<img id="manusoft_cf2pdf_lateral_sup_preview" width="150" height="150" src="'.$lateral_sup_url.'" />';
-                                            ?>
+												<img id="manusoft_cf2pdf_lateral_sup_preview" width="150" src="<?php echo $lateral_sup_url; ?>" />
 											</div>
 											<div class="manusoft_cf2pdf_image_input">
-												<input type="text" name="lateral_sup_url" id="manusoft_cf2pdf_lateral_sup_url" value="<?php if ($config['url_img_lat_sup'] != "") { echo $lateral_sup_url; } ?>" />
+												<input type="text" name="lateral_sup_url" id="manusoft_cf2pdf_lateral_sup_url" value="<?php if ($config_data['url_img_lat_sup'] != "") { echo $lateral_sup_url; } ?>" />
 												<input type="button" class="button-secondary" id="manusoft_cf2pdf_lateral_sup_button" value="Subir imagen" />
 											</div>
 									</td>
 									<td id="manusoft_cf2pdf_lateral_inf_image">
 										<p class="post-attributes-label-wrapper"><b>Selecciona la imagen inferior del lateral de la plantilla PDF:</b></p>
 										<div class="manusoft_cf2pdf_image_preview">
-										<?php
-                                            echo '<img id="manusoft_cf2pdf_lateral_inf_preview" width="150" height="150" src="'.$lateral_inf_url.'" />';
-                                        ?>
+											<img id="manusoft_cf2pdf_lateral_inf_preview" width="150" src="<?php echo $lateral_inf_url; ?>" />
 										</div>
 										<div class="manusoft_cf2pdf_image_input">
-											<input type="text" name="lateral_inf_url" id="manusoft_cf2pdf_lateral_inf_url" value="<?php if ($config['url_img_lat_inf'] != "") { echo $lateral_inf_url; } ?>"/>
+											<input type="text" name="lateral_inf_url" id="manusoft_cf2pdf_lateral_inf_url" value="<?php if ($config_data['url_img_lat_inf'] != "") { echo $lateral_inf_url; } ?>"/>
 											<input type="button" class="button-secondary" id="manusoft_cf2pdf_lateral_inf_button" value="Subir imagen" />
 										</div>
 									</td>
@@ -108,6 +103,8 @@ if (check_initial_config()) {
 					</div>
 				</div>
 			</div>
+		<?php } else { ?>
+			<input type="hidden" name="config_inicial" id="config_inicial" value="1" />
 		<?php } ?>
 			<div id="postbox-container-2" class="postbox-container">
 				<div class="postbox">

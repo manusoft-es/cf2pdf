@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Contact Form to PDF
+Plugin Name: ManuSoft - Contact Form 7 to PDF
 Plugin URI: https://github.com/manusoft-es/manusoft-cf2pdf
 Description: Plugin para convertir registros de Contact Form 7 a PDF
 Version: 1.1
@@ -11,6 +11,11 @@ defined('ABSPATH') or die('No tienes permiso para hacer eso.');
 
 require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_functions.php';
 require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_config_functions.php';
+require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_cf7_functions.php';
+require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_forms_functions.php';
+require_once plugin_dir_path(__FILE__).'inc/classes/manusoft_cf2pdf_forms_class.php';
+require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_data_functions.php';
+require_once plugin_dir_path(__FILE__).'inc/classes/manusoft_cf2pdf_data_class.php';
 
 // Insercción del fichero con CSS privado propio
 function load_manusoft_cf2pdf_admin_style() {
@@ -51,16 +56,53 @@ function manusoft_cf2pdf_create_config_table() {
     dbDelta($sql);
 }
 
+// Modificación de la tabla con los datos de configuración para incluir los datos de la plantilla
+function manusoft_cf2pdf_alter_config_table() {
+    global $wpdb;
+    $table = $wpdb->prefix.'manusoft_cf2pdf_config';
+    $query = "ALTER TABLE ".$table."
+                    ADD url_img_sup varchar(255) DEFAULT NULL,
+                    ADD url_img_lat_sup varchar(255) DEFAULT NULL,
+                    ADD url_img_lat_inf varchar(255) DEFAULT NULL,
+                    ADD txt_lat varchar(520) DEFAULT NULL,
+                    ADD txt_inf varchar(880) DEFAULT NULL";
+    $alter_result = $wpdb->query($query);
+    return $alter_result;
+}
+
+// Creación de tabla con los datos de los registros de los formularios
+function manusoft_cf2pdf_create_data_table() {
+    global $wpdb;
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE ".$wpdb->prefix."manusoft_cf2pdf_data (
+            form_id bigint(20) NOT NULL AUTO_INCREMENT,
+            form_post_id bigint(20) NOT NULL,
+            form_value longtext NOT NULL,
+            form_date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+            PRIMARY KEY  (form_id)
+        ) $charset_collate;";
+    require_once( ABSPATH."wp-admin/includes/upgrade.php");
+    dbDelta($sql);
+}
+
 // Método a ejecutar al desactivar el plugin
 register_deactivation_hook( __FILE__, 'manusoft_cf2pdf_desactivacion' );
 function manusoft_cf2pdf_desactivacion() {
     manusoft_cf2pdf_delete_config_table();
+    manusoft_cf2pdf_delete_data_table();
 }
 
 // Borrado de tabla con los datos de configuración
 function manusoft_cf2pdf_delete_config_table() {
     global $wpdb;
     $query = "DROP TABLE IF EXISTS ".$wpdb->prefix."manusoft_cf2pdf_config;";
+    $wpdb->get_var($query);
+}
+
+// Borrado de tabla con los datos de configuración
+function manusoft_cf2pdf_delete_data_table() {
+    global $wpdb;
+    $query = "DROP TABLE IF EXISTS ".$wpdb->prefix."manusoft_cf2pdf_data;";
     $wpdb->get_var($query);
 }
 ?>

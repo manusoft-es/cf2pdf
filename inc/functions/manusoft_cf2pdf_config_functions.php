@@ -1,6 +1,22 @@
 <?php
 defined('ABSPATH') or die('No tienes permiso para hacer eso.');
 
+// 'Ajax action' para actualizar la imagen
+function manusoft_cf2pdf_get_image() {
+    if(isset($_GET['id'])) {
+        $image = wp_get_attachment_image(filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT ), 'medium', false, array( 'id' => 'manusoft_cf2pdf_preview_header'));
+        $url = wp_get_attachment_url($_GET['id']);
+        $data = array(
+            'image' => $image,
+            'url' => $url,
+        );
+        wp_send_json_success($data);
+    } else {
+        wp_send_json_error();
+    }
+}
+add_action('wp_ajax_manusoft_cf2pdf_get_image', 'manusoft_cf2pdf_get_image');
+
 // 'Ajax action' para guardar la configuración en base de datos
 function manusoft_cf2pdf_save_config() {
     $check_data = true;
@@ -12,23 +28,49 @@ function manusoft_cf2pdf_save_config() {
     isset($_GET['provincia_grupo']) && $_GET['provincia_grupo'] != "" && preg_match('/^[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[0-9a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/', $_GET['provincia_grupo']) ? $provincia_grupo = sanitize_text_field($_GET['provincia_grupo']) : $check_data = false;
     isset($_GET['cp_grupo']) && $_GET['cp_grupo'] != "" && preg_match('/^(\d{5})$/', $_GET['cp_grupo']) ? $cp_grupo = sanitize_text_field($_GET['cp_grupo']) : $check_data = false;
     
+    if (check_initial_config()) {
+        isset($_GET['header_url']) ? $header_url = sanitize_text_field($_GET['header_url']) : $header_url = "";
+        isset($_GET['lateral_sup_url']) ? $lateral_sup_url = sanitize_text_field($_GET['lateral_sup_url']) : $lateral_sup_url = "";
+        isset($_GET['lateral_inf_url']) ? $lateral_inf_url = sanitize_text_field($_GET['lateral_inf_url']) : $lateral_inf_url = "";
+        isset($_GET['lateral_text']) ? $lateral_text = sanitize_text_field($_GET['lateral_text']) : $lateral_text = "";
+        isset($_GET['footer_text']) ? $footer_text = sanitize_text_field($_GET['footer_text']) : $footer_text = "";
+    }
+    
     if ($check_data) {
-        $data = array(
-            'nombre_grupo' => $nombre_grupo,
-            'cif_grupo' => $cif_grupo,
-            'email_grupo' => $email_grupo,
-            'direccion_grupo' => $direccion_grupo,
-            'poblacion_grupo' => $poblacion_grupo,
-            'provincia_grupo' => $provincia_grupo,
-            'cp_grupo' => $cp_grupo
-        );
+        if (check_initial_config()) {
+            $data = array(
+                'nombre_grupo' => $nombre_grupo,
+                'cif_grupo' => $cif_grupo,
+                'email_grupo' => $email_grupo,
+                'direccion_grupo' => $direccion_grupo,
+                'poblacion_grupo' => $poblacion_grupo,
+                'provincia_grupo' => $provincia_grupo,
+                'cp_grupo' => $cp_grupo,
+                
+                'url_img_sup' => $header_url,
+                'url_img_lat_sup' => $lateral_sup_url,
+                'url_img_lat_inf' => $lateral_inf_url,
+                'txt_lat' => $lateral_text,
+                'txt_inf' => $footer_text
+            );
+        } else {
+            $data = array(
+                'nombre_grupo' => $nombre_grupo,
+                'cif_grupo' => $cif_grupo,
+                'email_grupo' => $email_grupo,
+                'direccion_grupo' => $direccion_grupo,
+                'poblacion_grupo' => $poblacion_grupo,
+                'provincia_grupo' => $provincia_grupo,
+                'cp_grupo' => $cp_grupo
+            );
+        }
         
         if (count(manusoft_cf2pdf_get_cofig_data()) > 0) {
             $db_result = manusoft_cf2pdf_update_config_data($data);
         } else {
             $db_result = manusoft_cf2pdf_insert_config_data($data);
         }
-        wp_send_json_success(array('result' => $check_data));
+        wp_send_json_success(array('result' => $db_result));
     } else {
         wp_send_json_success(array('result' => false));
     }
@@ -39,7 +81,7 @@ add_action('wp_ajax_manusoft_cf2pdf_save_config', 'manusoft_cf2pdf_save_config')
 function manusoft_cf2pdf_get_cofig_data() {
     global $wpdb;
     $table = $wpdb->prefix.'manusoft_cf2pdf_config';
-    $update_result = $wpdb->get_row("SELECT * FROM ".$table.";","ARRAY_A");
+    $update_result = $wpdb->get_row("SELECT * FROM ".$table." WHERE id =  1;","ARRAY_A");
     return $update_result;
 }
 
@@ -49,17 +91,12 @@ function manusoft_cf2pdf_insert_config_data($data) {
     $table = $wpdb->prefix.'manusoft_cf2pdf_config';
     $insert_result = $wpdb->insert($table,$data);
     if ($insert_result) {
-        $query = "ALTER TABLE ".$table."
-                    ADD url_img_sup varchar(255) DEFAULT NULL,
-                    ADD url_img_lat_sup varchar(255) DEFAULT NULL,
-                    ADD url_img_lat_inf varchar(255) DEFAULT NULL,
-                    ADD txt_lat varchar(255) DEFAULT NULL,
-                    ADD txt_inf varchar(255) DEFAULT NULL";
-        $alter_result = $wpdb->query($query);
+        $alter_result = manusoft_cf2pdf_alter_config_table();
+        $create_data_result = manusoft_cf2pdf_create_data_table();
     } else {
         $alter_result = "insert_error";
     }
-    return $insert_result." ## ".$alter_result;
+    return $insert_result." ## ".$alter_result." ## ".$create_data_result;
 }
 
 // Método para actualizar los datos de configuración
