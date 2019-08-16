@@ -93,6 +93,7 @@ function manusoft_cf2pdf_insert_config_data($data) {
     if ($insert_result) {
         $alter_result = manusoft_cf2pdf_alter_config_table();
         $create_data_result = manusoft_cf2pdf_create_data_table();
+        manusoft_cf2pdf_create_forms();
     } else {
         $alter_result = "insert_error";
     }
@@ -107,6 +108,7 @@ function manusoft_cf2pdf_update_config_data($data) {
         'id' => 1
     );
     $result = $wpdb->update($table,$data,$where);
+    manusoft_cf2pdf_create_forms();
     return $result;
 }
 ?>

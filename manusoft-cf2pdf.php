@@ -13,6 +13,7 @@ require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_functions.
 require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_config_functions.php';
 require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_cf7_functions.php';
 require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_forms_functions.php';
+require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_cf7forms_functions.php';
 require_once plugin_dir_path(__FILE__).'inc/classes/manusoft_cf2pdf_forms_class.php';
 require_once plugin_dir_path(__FILE__).'inc/functions/manusoft_cf2pdf_data_functions.php';
 require_once plugin_dir_path(__FILE__).'inc/classes/manusoft_cf2pdf_data_class.php';
