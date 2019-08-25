@@ -45,9 +45,16 @@ function manusoft_cf2pdf_get_indexes($form_id) {
     }
     return $indexes;
 }
+
 function manusoft_cf2pdf_count_data($form_id) {
     global $wpdb;
     $query = "SELECT COUNT(1) FROM ".$wpdb->prefix."manusoft_cf2pdf_data WHERE form_post_id = '".$form_id."';";
+    return $wpdb->get_var($query);
+}
+
+function manusoft_cf2pdf_get_form_type($form_id) {
+    global $wpdb;
+    $query = "SELECT meta_value FROM ".$wpdb->prefix."postmeta WHERE post_id = ".$form_id." AND meta_key = '_manusoft_form_type';";
     return $wpdb->get_var($query);
 }
 

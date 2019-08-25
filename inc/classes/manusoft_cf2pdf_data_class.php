@@ -80,7 +80,18 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
                         $_SESSION['config'][$key] = $value;
                     }
                 }
-                return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
+                $form_type = manusoft_cf2pdf_get_form_type($_GET['id']);
+                if ($form_type == NULL) {
+                    return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
+                } else if ($form_type == 'consentimiento') {
+                    return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_consentimiento_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
+                } else if ($form_type == 'banco') {
+                    return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_banco_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
+                } else if ($form_type == 'inscripcion') {
+                    return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_inscripcion_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
+                } else if ($form_type == 'medico') {
+                    return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_medico_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
+                }
             case $column_name:
                 if (is_array($item[$column_name])) {
                     return implode(",",$item[$column_name]);

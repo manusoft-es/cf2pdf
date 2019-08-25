@@ -72,6 +72,13 @@ function manusoft_cf2pdf_create_consentimiento_form() {
         'meta_value' => $mail
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    
+    $data_postmeta = array(
+        'post_id' => $id,
+        'meta_key' => '_manusoft_form_type',
+        'meta_value' => 'consentimiento'
+    );
+    $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
 }
 
 function manusoft_cf2pdf_get_consentimiento_content() {
@@ -382,6 +389,13 @@ function manusoft_cf2pdf_create_inscripcion_form() {
         'post_id' => $id,
         'meta_key' => '_mail',
         'meta_value' => $mail
+    );
+    $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    
+    $data_postmeta = array(
+        'post_id' => $id,
+        'meta_key' => '_manusoft_form_type',
+        'meta_value' => 'inscripcion'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
 }
@@ -960,6 +974,13 @@ function manusoft_cf2pdf_create_medico_form() {
         'meta_value' => $mail
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    
+    $data_postmeta = array(
+        'post_id' => $id,
+        'meta_key' => '_manusoft_form_type',
+        'meta_value' => 'medico'
+    );
+    $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
 }
 
 function manusoft_cf2pdf_get_medico_content() {
@@ -1274,6 +1295,13 @@ function manusoft_cf2pdf_create_banco_form() {
         'post_id' => $id,
         'meta_key' => '_mail',
         'meta_value' => $mail
+    );
+    $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    
+    $data_postmeta = array(
+        'post_id' => $id,
+        'meta_key' => '_manusoft_form_type',
+        'meta_value' => 'banco'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
 }

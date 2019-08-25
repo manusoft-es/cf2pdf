@@ -89,25 +89,27 @@ if (isset($_SESSION['start'])) {
     </style>
     <page backtop="30mm" backbottom="25mm" backleft="5mm" backright="0mm">
       <page_header>
-        <div class="cabecera">
-          <img src="<?php echo $url_img_sup; ?>" />
-        </div>
-        <div class="lateral">
-          <div class="logo_andalucia">
-            <img src="<?php echo $url_img_lat_sup; ?>" />
-          </div>
-          <div class="txt_lateral">
-              <p>
-              	<small>
-              		<?php echo substr($txt_lat,0,520); ?>
-                </small>
-              </p>
-          </div>
-          <div class="logo_msc">
-            <img src="<?php echo $url_img_lat_inf; ?>" />
-          </div>
-        </div>
-      </page_header>
+			<div class="cabecera">
+				<?php if ($url_img_sup != "" ) { ?>
+				<img src="<?php echo $url_img_sup; ?>" />
+				<?php } ?>
+			</div>
+			<div class="lateral">
+				<div class="logo_andalucia">
+					<?php if ($url_img_lat_sup != "" ) { ?>
+					<img src="<?php echo $url_img_lat_sup; ?>" />
+					<?php } ?>
+				</div>
+				<div class="txt_lateral">
+					<p><small><?php echo substr($txt_lat,0,520); ?></small></p>
+				</div>
+				<div class="logo_msc">
+					<?php if ($url_img_lat_inf != "" ) { ?>
+					<img src="<?php echo $url_img_lat_inf; ?>" />
+					<?php } ?>
+				</div>
+			</div>
+		</page_header>
       <page_footer>
         <div class="pie">
           <p>
@@ -126,20 +128,20 @@ if (isset($_SESSION['start'])) {
             <tr>
               <th><?php echo str_replace("your-","",$index); ?></th>
               <td>
-          <?php if (is_array($form_data[$index])) {
-                  echo implode(",",$form_data[$index]);
-                } else {
-                  if (preg_match("/^((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))$/",str_replace("&#047;", "/", $form_data[$index]))) {
-                    if (strpos($form_data[$index],".png") === false) {
-                        echo $form_data[$index];
+              <?php if (is_array($form_data[$index])) {
+                      echo implode(",",$form_data[$index]);
                     } else {
-                        echo "<img class='img_form' src='".str_replace("&#047;","/",$form_data[$index])."' />";
+                      if (preg_match("/^((http|https):\/\/?)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/?))$/",str_replace("&#047;", "/", $form_data[$index]))) {
+                        if (strpos($form_data[$index],".png") === false) {
+                            echo $form_data[$index];
+                        } else {
+                            echo "<img class='img_form' src='".str_replace("&#047;","/",$form_data[$index])."' />";
+                        }
+                      } else {
+                        echo $form_data[$index];
+                      }
                     }
-                  } else {
-                    echo $form_data[$index];
-                  }
-                }
-          ?>
+              ?>
               </td>
             </tr>
           <?php   }
