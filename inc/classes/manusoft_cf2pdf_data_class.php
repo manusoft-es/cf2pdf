@@ -13,13 +13,47 @@ if (!class_exists('WP_List_Table')) {
 // Clase secundaria que extiende de 'WP_List_Table'
 class manusoft_cf2pdf_data_list_table extends WP_List_Table {
     function get_columns() {
+        $indexes = manusoft_cf2pdf_get_indexes($_GET['id']);
+        $form_type = manusoft_cf2pdf_get_form_type($_GET['id']);
+        
         $columns = [];
         $columns['cb'] = '<input type="checkbox" />';
         $columns['id'] = '<b>#</b>';
-        foreach (manusoft_cf2pdf_get_indexes($_GET['id']) as $index) {
-            if (strpos($index,"-attachment") === false && strpos($index,"-inline") === false) {
-                $columns[$index] = '<b>'.str_replace("your-","",$index).'</b>';
+        if ($form_type == NULL) {
+            foreach ($indexes as $index) {
+                if (strpos($index,"-attachment") === false && strpos($index,"-inline") === false) {
+                    $columns[$index] = '<b>'.str_replace("your-","",$index).'</b>';
+                }
             }
+        } else if ($form_type == 'consentimiento') {
+            $columns['nombre_nino_a'] = '<b>Nombre del niño/a</b>';
+            $columns['nombre_padre_madre'] = '<b>Nombre del padre/madre</b>';
+            $columns['dni_padre_madre'] = '<b>DNI del padre/madre</b>';
+            $columns['tratamiento_imagenes'] = '<b>Autorización</b>';
+            $columns['fecha'] = '<b>Fecha de la cumplimentación</b>';
+            $columns['firma'] = '<b>Firma</b>';
+        } else if ($form_type == 'banco') {
+            $columns['familia'] = '<b>Familia</b>';
+            $columns['importe'] = '<b>Importe</b>';
+            $columns['titular'] = '<b>Titular</b>';
+            $columns['dni'] = '<b>DNI del titular</b>';
+            $columns['num_cuenta'] = '<b>Número de cuenta</b>';
+            $columns['firma'] = '<b>Firma</b>';
+        } else if ($form_type == 'inscripcion') {
+            $columns['nombre_nino_a'] = '<b>Nombre del niño/a</b>';
+            $columns['rama'] = '<b>Rama</b>';
+            $columns['fecha_ingreso'] = '<b>Fecha de ingreso</b>';
+            $columns['nombre_padre'] = '<b>Nombre del padre</b>';
+            $columns['tlf_movil_padre'] = '<b>Tlf. móvil del padre</b>';
+            $columns['nombre_madre'] = '<b>Nombre de la madre</b>';
+            $columns['tlf_movil_madre'] = '<b>Tlf. móvil de la madre</b>';
+            $columns['firma'] = '<b>Firma</b>';
+        } else if ($form_type == 'medico') {
+            $columns['fecha_cumplimentacion'] = '<b>Fecha de cumplimentación</b>';
+            $columns['nombre'] = '<b>Nombre</b>';
+            $columns['fecha_nacimiento'] = '<b>Fecha de nacimiento</b>';
+            $columns['nombre_padre'] = '<b>Nombre del padre/madre</b>';
+            $columns['firma'] = '<b>Firma</b>';
         }
         $columns['download'] = '<b>Descargar</b>';
         return $columns;

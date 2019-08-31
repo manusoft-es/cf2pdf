@@ -141,7 +141,7 @@ if (isset($_SESSION['start'])) {
 			</div>
 			<div class="doc_text_1">
 				<p style="font-size:14px;">
-					<b>Familia:</b> <span style="font-size:18px;"><?php echo $familia; ?></span>
+					<b>Familia:</b> <span style="font-size:18px;"><?php echo strtoupper($familia); ?></span>
 				</p>
 				<p style="color:red; font-size:14px;">
 					<b>El importe es el resultado de multiplicar 15 € (cuota de miembro del grupo) por el número de miembros que pertenecen al grupo.</b>
@@ -149,8 +149,8 @@ if (isset($_SESSION['start'])) {
 				<br>
 				<table style="font-size:14px; width:100%;">
 					<tr>
-						<td style="width:50%;"><b>IMPORTE:</b> <span style="font-size:18px;"><?php echo $importe; ?></span> EUROS</td>
-						<td style="width:50%;"><b>PERIODICIDAD:</b> <span style="font-size:18px;">Mensual</span></td>
+						<td style="width:65%;"><b>IMPORTE:</b> <span style="font-size:18px;"><?php echo $importe; ?></span> EUROS</td>
+						<td style="width:35%;"><b>PERIODICIDAD:</b> <span style="font-size:18px;">MENSUAL</span></td>
 					</tr>
 				</table>
 			</div>
@@ -161,14 +161,14 @@ if (isset($_SESSION['start'])) {
 				<br>
 				<table style="font-size:14px; width:100%;">
 					<tr>
-						<td style="width:50%;"><b>Titular Cuenta:</b> <span style="font-size:18px;"><?php echo $nombre_titular; ?></span></td>
-						<td style="width:50%;"><b>D.N.I.:</b> <span style="font-size:18px;"><?php echo $dni_titular; ?></span></td>
+						<td style="width:75%;"><b>Titular Cuenta:</b> <span style="font-size:18px;"><?php echo strtoupper($nombre_titular); ?></span></td>
+						<td style="width:25%;"><b>D.N.I.:</b> <span style="font-size:18px;"><?php echo $dni_titular; ?></span></td>
 					</tr>
 				</table><br>
 				<p style="text-align:center;">
 					<span style="font-size:14px;">
 						Número de cuenta IBAN<br>
-						Mira tú talonario, libreta o extracto y cumplimenta los datos de la misma en su totalidad.
+						Mira tu talonario, libreta o extracto y cumplimenta los datos de la misma en su totalidad.
 					</span><br><br>
 					<span style="font-size:18px;">
 						<?php echo $num_cuenta; ?>
