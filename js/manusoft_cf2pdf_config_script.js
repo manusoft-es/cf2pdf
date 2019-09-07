@@ -11,6 +11,8 @@ jQuery(document).ready( function($) {
 	    var poblacion_grupo = jQuery('#poblacion_grupo').val();
 	    var provincia_grupo = jQuery('#provincia_grupo').val();
 	    var cp_grupo = jQuery('#cp_grupo').val();
+	    var cuota = jQuery('#cuota').val();
+	    var periodicidad = jQuery('#periodicidad option:selected').val();
 	    
 	    var config_inicial = jQuery('#config_inicial').val();
 	    if (config_inicial == "1") {
@@ -29,6 +31,8 @@ jQuery(document).ready( function($) {
     	jQuery('#manusoft_cf2pdf_poblacion_grupo_messages').html("");
     	jQuery('#manusoft_cf2pdf_provincia_grupo_messages').html("");
     	jQuery('#manusoft_cf2pdf_cp_grupo_messages').html("");
+    	jQuery('#manusoft_cf2pdf_cuota_messages').html("");
+    	jQuery('#manusoft_cf2pdf_periodicidad_messages').html("");
 	    
 	    var check_data = true;
 	    if (nombre_grupo == "") {
@@ -90,6 +94,15 @@ jQuery(document).ready( function($) {
 	    	jQuery('#cp_grupo').css("border","solid 1px red");
 	    	jQuery('#manusoft_cf2pdf_cp_grupo_messages').html("<p style='color:red;'><small>Este campo debe estar formado únicamente por 6 dígitos.</small></p>");
 	    }
+	    if (cuota == "") {
+	    	check_data = false;
+	    	jQuery('#cuota').css("border","solid 1px red");
+	    	jQuery('#manusoft_cf2pdf_cuota_messages').html("<p style='color:red;'><small>Este campo no puede estar en blanco.</small></p>");
+	    } else if (!cuota.match(/^\d{0,}$/)) {
+	    	check_data = false;
+	    	jQuery('#cuota').css("border","solid 1px red");
+	    	jQuery('#manusoft_cf2pdf_cuota_messages').html("<p style='color:red;'><small>Este campo debe estar formado únicamente por dígitos.</small></p>");
+	    }
 	    
 	    if (check_data) {
 		    if (config_inicial == "1") {
@@ -102,6 +115,8 @@ jQuery(document).ready( function($) {
 		    			poblacion_grupo:poblacion_grupo,
 		    			provincia_grupo:provincia_grupo,
 		    			cp_grupo:cp_grupo,
+		    			cuota:cuota,
+		    			periodicidad:periodicidad,
 		    			
 		    			header_url:header_url,
 	    				lateral_sup_url:lateral_sup_url,
@@ -118,7 +133,9 @@ jQuery(document).ready( function($) {
 		    			direccion_grupo:direccion_grupo,
 		    			poblacion_grupo:poblacion_grupo,
 		    			provincia_grupo:provincia_grupo,
-		    			cp_grupo:cp_grupo
+		    			cp_grupo:cp_grupo,
+		    			cuota:cuota,
+		    			periodicidad:periodicidad
 		    	};
 		    }
 		    

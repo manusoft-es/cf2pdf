@@ -27,6 +27,8 @@ function manusoft_cf2pdf_save_config() {
     isset($_GET['poblacion_grupo']) && $_GET['poblacion_grupo'] != "" && preg_match('/^[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[0-9a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/', $_GET['poblacion_grupo']) ? $poblacion_grupo = sanitize_text_field($_GET['poblacion_grupo']) : $check_data = false;
     isset($_GET['provincia_grupo']) && $_GET['provincia_grupo'] != "" && preg_match('/^[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]+(\s*[0-9a-zA-ZÀ-ÿ\u00f1\u00d1]*)*[0-9a-zA-ZÀ-ÿ\u00f1\u00d1\s]+$/', $_GET['provincia_grupo']) ? $provincia_grupo = sanitize_text_field($_GET['provincia_grupo']) : $check_data = false;
     isset($_GET['cp_grupo']) && $_GET['cp_grupo'] != "" && preg_match('/^(\d{5})$/', $_GET['cp_grupo']) ? $cp_grupo = sanitize_text_field($_GET['cp_grupo']) : $check_data = false;
+    isset($_GET['cuota']) && $_GET['cuota'] != "" && preg_match('/^\d{0,}$/', $_GET['cuota']) ? $cuota = sanitize_text_field($_GET['cuota']) : $check_data = false;
+    isset($_GET['periodicidad']) && ($_GET['periodicidad'] == "Mensual" || $_GET['periodicidad'] == "Anual") ? $periodicidad = sanitize_text_field($_GET['periodicidad']) : $check_data = false;
     
     if (check_initial_config()) {
         isset($_GET['header_url']) ? $header_url = sanitize_text_field($_GET['header_url']) : $header_url = "";
@@ -46,6 +48,8 @@ function manusoft_cf2pdf_save_config() {
                 'poblacion_grupo' => $poblacion_grupo,
                 'provincia_grupo' => $provincia_grupo,
                 'cp_grupo' => $cp_grupo,
+                'cuota' => $cuota,
+                'periodicidad' => $periodicidad,
                 
                 'url_img_sup' => $header_url,
                 'url_img_lat_sup' => $lateral_sup_url,
@@ -61,7 +65,9 @@ function manusoft_cf2pdf_save_config() {
                 'direccion_grupo' => $direccion_grupo,
                 'poblacion_grupo' => $poblacion_grupo,
                 'provincia_grupo' => $provincia_grupo,
-                'cp_grupo' => $cp_grupo
+                'cp_grupo' => $cp_grupo,
+                'cuota' => $cuota,
+                'periodicidad' => $periodicidad
             );
         }
         
@@ -108,7 +114,7 @@ function manusoft_cf2pdf_update_config_data($data) {
         'id' => 1
     );
     $result = $wpdb->update($table,$data,$where);
-    manusoft_cf2pdf_create_forms();
-    return $result;
+    $form_result = manusoft_cf2pdf_update_forms();
+    return $result." ".$form_result;
 }
 ?>

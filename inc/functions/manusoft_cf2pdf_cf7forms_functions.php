@@ -1,4 +1,12 @@
 <?php
+// Función para obtener el ID del formulario por defecto cuyo '_manusoft_form_type' se pasa como parámetro
+function manusoft_cf2pdf_get_default_id_form($default_type) {
+    global $wpdb;
+    $table_postmeta = $wpdb->prefix."postmeta";
+    $default_id_form = $wpdb->get_var("SELECT post_id FROM ".$table_postmeta." WHERE meta_key = '_manusoft_form_type' AND meta_value = '".$default_type."';");
+    return $default_id_form;
+}
+
 // Creación de los formularios de ContactForm7 por defecto
 function manusoft_cf2pdf_create_forms() {
     manusoft_cf2pdf_create_consentimiento_form();
@@ -6,10 +14,18 @@ function manusoft_cf2pdf_create_forms() {
     manusoft_cf2pdf_create_medico_form();
     manusoft_cf2pdf_create_banco_form();
 }
+// Creación de los formularios de ContactForm7 por defecto
+function manusoft_cf2pdf_update_forms() {
+    manusoft_cf2pdf_update_consentimiento_form();
+    manusoft_cf2pdf_update_inscripcion_form();
+    manusoft_cf2pdf_update_medico_form();
+    manusoft_cf2pdf_update_banco_form();
+}
 
 // Creación del formulario "Consentimiento Tratamiento de Datos de Carácter Personal"
 function manusoft_cf2pdf_create_consentimiento_form() {
     global $wpdb;
+    $check_error = false;
     $table_post = $wpdb->prefix."posts";
     $table_postmeta = $wpdb->prefix."postmeta";
     $data = array(
@@ -28,6 +44,10 @@ function manusoft_cf2pdf_create_consentimiento_form() {
     );
     $insert_result = $wpdb->insert($table_post,$data);
     $id = $wpdb->insert_id;
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error en la creación del formulario 'Consentimiento tratamiento de datos de caracter personal'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -35,28 +55,44 @@ function manusoft_cf2pdf_create_consentimiento_form() {
         'meta_value' => ''
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
-
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_additional_settings' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+    }
+    
     $data_postmeta = array(
         'post_id' => $id,
         'meta_key' => '_locale',
         'meta_value' => 'es_ES'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
-
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_locale' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+    }
+    
     $data_postmeta = array(
         'post_id' => $id,
         'meta_key' => '_messages',
         'meta_value' => 'a:23:{s:12:"mail_sent_ok";s:44:"Muchas gracias por rellenar este formulario.";s:12:"mail_sent_ng";s:88:"Hubo un error intentando enviar el formulario. Por favor inténtelo de nuevo más tarde.";s:16:"validation_error";s:74:"Uno o más campos tienen un error. Por favor revise e inténtelo de nuevo.";s:4:"spam";s:85:"Hubo un error intentando enviar tu mensaje. Por favor inténtalo de nuevo más tarde.";s:12:"accept_terms";s:71:"Debe aceptar los términos y condiciones antes de enviar el formulario.";s:16:"invalid_required";s:24:"El campo es obligatorio.";s:16:"invalid_too_long";s:28:"El campo es demasiado largo.";s:17:"invalid_too_short";s:28:"El campo es demasiado corto.";s:12:"invalid_date";s:34:"El formato de fecha es incorrecto.";s:14:"date_too_early";s:50:"La fecha es anterior a la más temprana permitida.";s:13:"date_too_late";s:50:"La fecha es posterior a la más tardía permitida.";s:13:"upload_failed";s:46:"Hubo un error desconocido subiendo el archivo.";s:24:"upload_file_type_invalid";s:51:"No tiene permisos para subir archivos de este tipo.";s:21:"upload_file_too_large";s:31:"El archivo es demasiado grande.";s:23:"upload_failed_php_error";s:43:"Se ha producido un error subiendo la imagen";s:14:"invalid_number";s:36:"El formato de número no es válido.";s:16:"number_too_small";s:45:"El número es menor que el mínimo permitido.";s:16:"number_too_large";s:45:"El número es mayor que el máximo permitido.";s:23:"quiz_answer_not_correct";s:44:"La respuesta al cuestionario no es correcta.";s:17:"captcha_not_match";s:37:"El código introducido es incorrecto.";s:13:"invalid_email";s:70:"La dirección de correo electrónico que ha introducido no es válida.";s:11:"invalid_url";s:21:"La URL no es válida.";s:11:"invalid_tel";s:38:"El número de teléfono no es válido.";}'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
-
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_messages' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+    }
+    
     $data_postmeta = array(
         'post_id' => $id,
         'meta_key' => '_mail_2',
         'meta_value' => 'a:9:{s:6:"active";b:0;s:7:"subject";s:0:"";s:6:"sender";s:0:"";s:9:"recipient";s:0:"";s:4:"body";s:0:"";s:18:"additional_headers";s:0:"";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
-
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_mail_2' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+    }
+    
     $form = manusoft_cf2pdf_get_consentimiento_form();
     $data_postmeta = array(
         'post_id' => $id,
@@ -64,7 +100,11 @@ function manusoft_cf2pdf_create_consentimiento_form() {
         'meta_value' => $form
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
-
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_form' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+    }
+    
     $mail = manusoft_cf2pdf_get_consentimiento_mail();
     $data_postmeta = array(
         'post_id' => $id,
@@ -72,6 +112,10 @@ function manusoft_cf2pdf_create_consentimiento_form() {
         'meta_value' => $mail
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_mail' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -79,6 +123,138 @@ function manusoft_cf2pdf_create_consentimiento_form() {
         'meta_value' => 'consentimiento'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_manusoft_form_type' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+    }
+    return $check_error;
+}
+
+// Actualización del formulario "Consentimiento Tratamiento de Datos de Carácter Personal"
+function manusoft_cf2pdf_update_consentimiento_form() {
+    $consentimiento_id = manusoft_cf2pdf_get_default_id_form('consentimiento');
+    if ($consentimiento_id != NULL) {
+        global $wpdb;
+        $check_error = false;
+        $table_post = $wpdb->prefix."posts";
+        $table_postmeta = $wpdb->prefix."postmeta";
+        $data = array(
+            'post_author' => 1,
+            'post_date' => date('Y-m-d H:i:s'),
+            'post_date_gmt' => date('Y-m-d H:i:s'),
+            'post_content' => manusoft_cf2pdf_get_consentimiento_content(),
+            'post_title' => 'Consentimiento tratamiento de datos de carácter personal',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+            'post_name' => 'consentimiento-tratamient-de-datos-de-caracter-personal',
+            'post_modified' => date('Y-m-d H:i:s'),
+            'post_modified_gmt' => date('Y-m-d H:i:s'),
+            'guid' => '',
+            'post_type' => 'wpcf7_contact_form'
+        );
+        $where = array ( 'ID' => $consentimiento_id );
+        $update_result = $wpdb->update($table_post,$data,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error en la actualización del formulario 'Consentimiento tratamiento de datos de caracter personal'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => ''
+        );
+        $where = array (
+            'meta_key' => '_additional_settings',
+            'post_id' => $consentimiento_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_additional_settings' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'es_ES'
+        );
+        $where = array (
+            'meta_key' => '_locale',
+            'post_id' => $consentimiento_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_locale' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'a:23:{s:12:"mail_sent_ok";s:44:"Muchas gracias por rellenar este formulario.";s:12:"mail_sent_ng";s:88:"Hubo un error intentando enviar el formulario. Por favor inténtelo de nuevo más tarde.";s:16:"validation_error";s:74:"Uno o más campos tienen un error. Por favor revise e inténtelo de nuevo.";s:4:"spam";s:85:"Hubo un error intentando enviar tu mensaje. Por favor inténtalo de nuevo más tarde.";s:12:"accept_terms";s:71:"Debe aceptar los términos y condiciones antes de enviar el formulario.";s:16:"invalid_required";s:24:"El campo es obligatorio.";s:16:"invalid_too_long";s:28:"El campo es demasiado largo.";s:17:"invalid_too_short";s:28:"El campo es demasiado corto.";s:12:"invalid_date";s:34:"El formato de fecha es incorrecto.";s:14:"date_too_early";s:50:"La fecha es anterior a la más temprana permitida.";s:13:"date_too_late";s:50:"La fecha es posterior a la más tardía permitida.";s:13:"upload_failed";s:46:"Hubo un error desconocido subiendo el archivo.";s:24:"upload_file_type_invalid";s:51:"No tiene permisos para subir archivos de este tipo.";s:21:"upload_file_too_large";s:31:"El archivo es demasiado grande.";s:23:"upload_failed_php_error";s:43:"Se ha producido un error subiendo la imagen";s:14:"invalid_number";s:36:"El formato de número no es válido.";s:16:"number_too_small";s:45:"El número es menor que el mínimo permitido.";s:16:"number_too_large";s:45:"El número es mayor que el máximo permitido.";s:23:"quiz_answer_not_correct";s:44:"La respuesta al cuestionario no es correcta.";s:17:"captcha_not_match";s:37:"El código introducido es incorrecto.";s:13:"invalid_email";s:70:"La dirección de correo electrónico que ha introducido no es válida.";s:11:"invalid_url";s:21:"La URL no es válida.";s:11:"invalid_tel";s:38:"El número de teléfono no es válido.";}'
+        );
+        $where = array (
+            'meta_key' => '_messages',
+            'post_id' => $consentimiento_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_messages' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'a:9:{s:6:"active";b:0;s:7:"subject";s:0:"";s:6:"sender";s:0:"";s:9:"recipient";s:0:"";s:4:"body";s:0:"";s:18:"additional_headers";s:0:"";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}'
+        );
+        $where = array (
+            'meta_key' => '_mail_2',
+            'post_id' => $consentimiento_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_mail_2' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+        }
+        
+        $form = manusoft_cf2pdf_get_consentimiento_form();
+        $data_postmeta = array(
+            'meta_value' => $form
+        );
+        $where = array (
+            'meta_key' => '_form',
+            'post_id' => $consentimiento_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_form' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+        }
+        
+        $mail = manusoft_cf2pdf_get_consentimiento_mail();
+        $data_postmeta = array(
+            'meta_value' => $mail
+        );
+        $where = array (
+            'meta_key' => '_mail',
+            'post_id' => $consentimiento_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_mail' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'consentimiento'
+        );
+        $where = array (
+            'meta_key' => '_manusoft_form_type',
+            'post_id' => $consentimiento_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_manusoft_form_type' en postmeta para 'Consentimiento tratamiento de datos de caracter personal'");
+        }
+        return $check_error;
+    } else {
+        manusoft_cf2pdf_create_consentimiento_form();
+    }
 }
 
 function manusoft_cf2pdf_get_consentimiento_content() {
@@ -314,21 +490,31 @@ function manusoft_cf2pdf_get_consentimiento_form() {
 
 function manusoft_cf2pdf_get_consentimiento_mail() {
     $config_data = manusoft_cf2pdf_get_cofig_data();
-    $email = "
-                a:9:{s:6:\"active\";b:1;s:7:\"subject\";s:57:\"Consentimiento Tratamiento de Datos de Carácter Personal\";s:6:\"sender\";s:32:\"".$config_data['email_grupo']."\";s:9:\"recipient\";s:32:\"".$config_data['email_grupo']."\";s:4:\"body\";s:212:\"De: [nombre_nino_a]
-                Padre/Madre: [nombre_padre_madre]
-                Fecha: [fecha]
-                    
-                ------------------------------------
-                    
-                Este correo ha sido enviado desde el formulario de la web de ".strtoupper($config_data['nombre_grupo'])." ".get_site_url()."\";s:18:\"additional_headers\";s:0:\"\";s:11:\"attachments\";s:0:\"\";s:8:\"use_html\";b:0;s:13:\"exclude_blank\";b:0;}
-    ";
+    $email_array = array(
+        'active' => 1,
+        'subject' => "Consentimiento Tratamiento de Datos de Carácter Personal",
+        'sender' => $config_data['email_grupo'],
+        'recipient' => $config_data['email_grupo'],
+        'body' => "De: [nombre_nino_a]
+Padre/Madre: [nombre_padre_madre]
+Fecha: [fecha]
+
+------------------------------------
+
+Este correo ha sido enviado desde el formulario de la web de ".strtoupper($config_data['nombre_grupo'])." ".get_site_url(),
+        'additional_headers' => "",
+        'attachments' => "",
+        'use_html' => 0,
+        'exclude_blank' => 0
+    );
+    $email = serialize($email_array);
     return $email;
 }
 
 // Creación del formulario "Solicitud de inscripción"
 function manusoft_cf2pdf_create_inscripcion_form() {
     global $wpdb;
+    $check_error = false;
     $table_post = $wpdb->prefix."posts";
     $table_postmeta = $wpdb->prefix."postmeta";
     $data = array(
@@ -347,6 +533,10 @@ function manusoft_cf2pdf_create_inscripcion_form() {
     );
     $insert_result = $wpdb->insert($table_post,$data);
     $id = $wpdb->insert_id;
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error en la creación del formulario 'Solicitud de inscripción'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -354,6 +544,10 @@ function manusoft_cf2pdf_create_inscripcion_form() {
         'meta_value' => ''
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_additional_settings' en postmeta para 'Solicitud de inscripción'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -361,6 +555,10 @@ function manusoft_cf2pdf_create_inscripcion_form() {
         'meta_value' => 'es_ES'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_locale' en postmeta para 'Solicitud de inscripción'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -368,6 +566,10 @@ function manusoft_cf2pdf_create_inscripcion_form() {
         'meta_value' => 'a:23:{s:12:"mail_sent_ok";s:44:"Muchas gracias por rellenar este formulario.";s:12:"mail_sent_ng";s:88:"Hubo un error intentando enviar el formulario. Por favor inténtelo de nuevo más tarde.";s:16:"validation_error";s:74:"Uno o más campos tienen un error. Por favor revise e inténtelo de nuevo.";s:4:"spam";s:85:"Hubo un error intentando enviar tu mensaje. Por favor inténtalo de nuevo más tarde.";s:12:"accept_terms";s:71:"Debe aceptar los términos y condiciones antes de enviar el formulario.";s:16:"invalid_required";s:24:"El campo es obligatorio.";s:16:"invalid_too_long";s:28:"El campo es demasiado largo.";s:17:"invalid_too_short";s:28:"El campo es demasiado corto.";s:12:"invalid_date";s:34:"El formato de fecha es incorrecto.";s:14:"date_too_early";s:50:"La fecha es anterior a la más temprana permitida.";s:13:"date_too_late";s:50:"La fecha es posterior a la más tardía permitida.";s:13:"upload_failed";s:46:"Hubo un error desconocido subiendo el archivo.";s:24:"upload_file_type_invalid";s:51:"No tiene permisos para subir archivos de este tipo.";s:21:"upload_file_too_large";s:31:"El archivo es demasiado grande.";s:23:"upload_failed_php_error";s:43:"Se ha producido un error subiendo la imagen";s:14:"invalid_number";s:36:"El formato de número no es válido.";s:16:"number_too_small";s:45:"El número es menor que el mínimo permitido.";s:16:"number_too_large";s:45:"El número es mayor que el máximo permitido.";s:23:"quiz_answer_not_correct";s:44:"La respuesta al cuestionario no es correcta.";s:17:"captcha_not_match";s:37:"El código introducido es incorrecto.";s:13:"invalid_email";s:70:"La dirección de correo electrónico que ha introducido no es válida.";s:11:"invalid_url";s:21:"La URL no es válida.";s:11:"invalid_tel";s:38:"El número de teléfono no es válido.";}'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_messages' en postmeta para 'Solicitud de inscripción'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -375,6 +577,10 @@ function manusoft_cf2pdf_create_inscripcion_form() {
         'meta_value' => 'a:9:{s:6:"active";b:0;s:7:"subject";s:0:"";s:6:"sender";s:0:"";s:9:"recipient";s:0:"";s:4:"body";s:0:"";s:18:"additional_headers";s:0:"";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_mail_2' en postmeta para 'Solicitud de inscripción'");
+    }
     
     $form = manusoft_cf2pdf_get_inscripcion_form();
     $data_postmeta = array(
@@ -383,6 +589,10 @@ function manusoft_cf2pdf_create_inscripcion_form() {
         'meta_value' => $form
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_form' en postmeta para 'Solicitud de inscripción'");
+    }
     
     $mail = manusoft_cf2pdf_get_inscripcion_mail();
     $data_postmeta = array(
@@ -391,6 +601,10 @@ function manusoft_cf2pdf_create_inscripcion_form() {
         'meta_value' => $mail
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_mail' en postmeta para 'Solicitud de inscripción'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -398,6 +612,136 @@ function manusoft_cf2pdf_create_inscripcion_form() {
         'meta_value' => 'inscripcion'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_manusoft_form_type' en postmeta para 'Solicitud de inscripción'");
+    }
+}
+
+// Actualización del formulario "Solicitud de inscripción"
+function manusoft_cf2pdf_update_inscripcion_form() {
+    $inscripcion_id = manusoft_cf2pdf_get_default_id_form('inscripcion');
+    if ($inscripcion_id != NULL) {
+        global $wpdb;
+        $check_error = false;
+        $table_post = $wpdb->prefix."posts";
+        $table_postmeta = $wpdb->prefix."postmeta";
+        $data = array(
+            'post_author' => 1,
+            'post_date' => date('Y-m-d H:i:s'),
+            'post_date_gmt' => date('Y-m-d H:i:s'),
+            'post_content' => manusoft_cf2pdf_get_inscripcion_content(),
+            'post_title' => 'Solicitud de inscripción',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+            'post_name' => 'solicitud-de-inscripcion',
+            'post_modified' => date('Y-m-d H:i:s'),
+            'post_modified_gmt' => date('Y-m-d H:i:s'),
+            'guid' => '',
+            'post_type' => 'wpcf7_contact_form'
+        );
+        $where = array ( 'ID' => $inscripcion_id );
+        $update_result = $wpdb->update($table_post,$data,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error en la actualización del formulario 'Solicitud de inscripción'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => ''
+        );
+        $where = array (
+            'meta_key' => '_additional_settings',
+            'post_id' => $inscripcion_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_additional_settings' en postmeta para 'Solicitud de inscripción'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'es_ES'
+        );
+        $where = array (
+            'meta_key' => '_locale',
+            'post_id' => $inscripcion_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_locale' en postmeta para 'Solicitud de inscripción'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'a:23:{s:12:"mail_sent_ok";s:44:"Muchas gracias por rellenar este formulario.";s:12:"mail_sent_ng";s:88:"Hubo un error intentando enviar el formulario. Por favor inténtelo de nuevo más tarde.";s:16:"validation_error";s:74:"Uno o más campos tienen un error. Por favor revise e inténtelo de nuevo.";s:4:"spam";s:85:"Hubo un error intentando enviar tu mensaje. Por favor inténtalo de nuevo más tarde.";s:12:"accept_terms";s:71:"Debe aceptar los términos y condiciones antes de enviar el formulario.";s:16:"invalid_required";s:24:"El campo es obligatorio.";s:16:"invalid_too_long";s:28:"El campo es demasiado largo.";s:17:"invalid_too_short";s:28:"El campo es demasiado corto.";s:12:"invalid_date";s:34:"El formato de fecha es incorrecto.";s:14:"date_too_early";s:50:"La fecha es anterior a la más temprana permitida.";s:13:"date_too_late";s:50:"La fecha es posterior a la más tardía permitida.";s:13:"upload_failed";s:46:"Hubo un error desconocido subiendo el archivo.";s:24:"upload_file_type_invalid";s:51:"No tiene permisos para subir archivos de este tipo.";s:21:"upload_file_too_large";s:31:"El archivo es demasiado grande.";s:23:"upload_failed_php_error";s:43:"Se ha producido un error subiendo la imagen";s:14:"invalid_number";s:36:"El formato de número no es válido.";s:16:"number_too_small";s:45:"El número es menor que el mínimo permitido.";s:16:"number_too_large";s:45:"El número es mayor que el máximo permitido.";s:23:"quiz_answer_not_correct";s:44:"La respuesta al cuestionario no es correcta.";s:17:"captcha_not_match";s:37:"El código introducido es incorrecto.";s:13:"invalid_email";s:70:"La dirección de correo electrónico que ha introducido no es válida.";s:11:"invalid_url";s:21:"La URL no es válida.";s:11:"invalid_tel";s:38:"El número de teléfono no es válido.";}'
+        );
+        $where = array (
+            'meta_key' => '_messages',
+            'post_id' => $inscripcion_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_messages' en postmeta para 'Solicitud de inscripción'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'a:9:{s:6:"active";b:0;s:7:"subject";s:0:"";s:6:"sender";s:0:"";s:9:"recipient";s:0:"";s:4:"body";s:0:"";s:18:"additional_headers";s:0:"";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}'
+        );
+        $where = array (
+            'meta_key' => '_mail_2',
+            'post_id' => $inscripcion_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_mail_2' en postmeta para 'Solicitud de inscripción'");
+        }
+        
+        $form = manusoft_cf2pdf_get_inscripcion_form();
+        $data_postmeta = array(
+            'meta_value' => $form
+        );
+        $where = array (
+            'meta_key' => '_form',
+            'post_id' => $inscripcion_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_form' en postmeta para 'Solicitud de inscripción'");
+        }
+        
+        $mail = manusoft_cf2pdf_get_inscripcion_mail();
+        $data_postmeta = array(
+            'meta_value' => $mail
+        );
+        $where = array (
+            'meta_key' => '_mail',
+            'post_id' => $inscripcion_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_mail' en postmeta para 'Solicitud de inscripción'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'inscripcion'
+        );
+        $where = array (
+            'meta_key' => '_manusoft_form_type',
+            'post_id' => $inscripcion_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_manusoft_form_type' en postmeta para 'Solicitud de inscripción'");
+        }
+    } else {
+        manusoft_cf2pdf_create_inscripcion_form();
+    }
 }
 
 function manusoft_cf2pdf_get_inscripcion_content() {
@@ -891,27 +1235,37 @@ function manusoft_cf2pdf_get_inscripcion_form() {
 
 function manusoft_cf2pdf_get_inscripcion_mail() {
     $config_data = manusoft_cf2pdf_get_cofig_data();
-    $email = "
-                a:9:{s:6:\"active\";b:1;s:7:\"subject\";s:25:\"Solicitud de inscripción\";s:6:\"sender\";s:32:\"".$config_data['email_grupo']."\";s:9:\"recipient\";s:32:\"".$config_data['email_grupo']."\";s:4:\"body\";s:408:\"Nombre: [nombre_nino_a]
-                Fecha nacimiento: [fecha_nacimiento_nino_a]
-                Rama: [rama]
-                Nombre padre: [nombre_padre]
-                Teléfono padre: [tlf_fijo_padre]
-                Móvil padre: [tlf_movil_padre]
-                Nombre: [nombre_madre]
-                Teléfono madre: [tlf_fijo_madre]
-                Móvil madre: [tlf_movil_madre]
-                
-                ------------------------------------
-                
-                Este correo ha sido enviado desde el formulario de la web de ".strtoupper($config_data['nombre_grupo'])." ".get_site_url()."\";s:18:\"additional_headers\";s:0:\"\";s:11:\"attachments\";s:0:\"\";s:8:\"use_html\";b:0;s:13:\"exclude_blank\";b:0;}
-    ";
+    $email_array = array(
+        'active' => 1,
+        'subject' => "Solicitud de inscripción",
+        'sender' => $config_data['email_grupo'],
+        'recipient' => $config_data['email_grupo'],
+        'body' => "Nombre: [nombre_nino_a]
+Fecha nacimiento: [fecha_nacimiento_nino_a]
+Rama: [rama]
+Nombre padre: [nombre_padre]
+Teléfono padre: [tlf_fijo_padre]
+Móvil padre: [tlf_movil_padre]
+Nombre: [nombre_madre]
+Teléfono madre: [tlf_fijo_madre]
+Móvil madre: [tlf_movil_madre]
+
+------------------------------------
+
+Este correo ha sido enviado desde el formulario de la web de ".strtoupper($config_data['nombre_grupo'])." ".get_site_url(),
+        'additional_headers' => "",
+        'attachments' => "",
+        'use_html' => 0,
+        'exclude_blank' => 0
+    );
+    $email = serialize($email_array);
     return $email;
 }
 
 // Creación del formulario "Datos Médicos"
 function manusoft_cf2pdf_create_medico_form() {
     global $wpdb;
+    $check_error = false;
     $table_post = $wpdb->prefix."posts";
     $table_postmeta = $wpdb->prefix."postmeta";
     $data = array(
@@ -930,6 +1284,10 @@ function manusoft_cf2pdf_create_medico_form() {
     );
     $insert_result = $wpdb->insert($table_post,$data);
     $id = $wpdb->insert_id;
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error en la creación del formulario 'Datos Médicos'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -937,6 +1295,10 @@ function manusoft_cf2pdf_create_medico_form() {
         'meta_value' => ''
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_additional_settings' en postmeta para 'Datos Médicos'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -944,6 +1306,10 @@ function manusoft_cf2pdf_create_medico_form() {
         'meta_value' => 'es_ES'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_locale' en postmeta para 'Datos Médicos'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -951,6 +1317,10 @@ function manusoft_cf2pdf_create_medico_form() {
         'meta_value' => 'a:23:{s:12:"mail_sent_ok";s:44:"Muchas gracias por rellenar este formulario.";s:12:"mail_sent_ng";s:88:"Hubo un error intentando enviar el formulario. Por favor inténtelo de nuevo más tarde.";s:16:"validation_error";s:74:"Uno o más campos tienen un error. Por favor revise e inténtelo de nuevo.";s:4:"spam";s:85:"Hubo un error intentando enviar tu mensaje. Por favor inténtalo de nuevo más tarde.";s:12:"accept_terms";s:71:"Debe aceptar los términos y condiciones antes de enviar el formulario.";s:16:"invalid_required";s:24:"El campo es obligatorio.";s:16:"invalid_too_long";s:28:"El campo es demasiado largo.";s:17:"invalid_too_short";s:28:"El campo es demasiado corto.";s:12:"invalid_date";s:34:"El formato de fecha es incorrecto.";s:14:"date_too_early";s:50:"La fecha es anterior a la más temprana permitida.";s:13:"date_too_late";s:50:"La fecha es posterior a la más tardía permitida.";s:13:"upload_failed";s:46:"Hubo un error desconocido subiendo el archivo.";s:24:"upload_file_type_invalid";s:51:"No tiene permisos para subir archivos de este tipo.";s:21:"upload_file_too_large";s:31:"El archivo es demasiado grande.";s:23:"upload_failed_php_error";s:43:"Se ha producido un error subiendo la imagen";s:14:"invalid_number";s:36:"El formato de número no es válido.";s:16:"number_too_small";s:45:"El número es menor que el mínimo permitido.";s:16:"number_too_large";s:45:"El número es mayor que el máximo permitido.";s:23:"quiz_answer_not_correct";s:44:"La respuesta al cuestionario no es correcta.";s:17:"captcha_not_match";s:37:"El código introducido es incorrecto.";s:13:"invalid_email";s:70:"La dirección de correo electrónico que ha introducido no es válida.";s:11:"invalid_url";s:21:"La URL no es válida.";s:11:"invalid_tel";s:38:"El número de teléfono no es válido.";}'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_messages' en postmeta para 'Datos Médicos'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -958,6 +1328,10 @@ function manusoft_cf2pdf_create_medico_form() {
         'meta_value' => 'a:9:{s:6:"active";b:0;s:7:"subject";s:0:"";s:6:"sender";s:0:"";s:9:"recipient";s:0:"";s:4:"body";s:0:"";s:18:"additional_headers";s:0:"";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_mail_2' en postmeta para 'Datos Médicos'");
+    }
     
     $form = manusoft_cf2pdf_get_medico_form();
     $data_postmeta = array(
@@ -966,6 +1340,10 @@ function manusoft_cf2pdf_create_medico_form() {
         'meta_value' => $form
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_form' en postmeta para 'Datos Médicos'");
+    }
     
     $mail = manusoft_cf2pdf_get_medico_mail();
     $data_postmeta = array(
@@ -974,6 +1352,10 @@ function manusoft_cf2pdf_create_medico_form() {
         'meta_value' => $mail
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_mail' en postmeta para 'Datos Médicos'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -981,6 +1363,136 @@ function manusoft_cf2pdf_create_medico_form() {
         'meta_value' => 'medico'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_manusoft_form_type' en postmeta para 'Datos Médicos'");
+    }
+}
+
+// Actualización del formulario "Datos Médicos"
+function manusoft_cf2pdf_update_medico_form() {
+    $medico_id = manusoft_cf2pdf_get_default_id_form('medico');
+    if ($medico_id != NULL) {
+        global $wpdb;
+        $check_error = false;
+        $table_post = $wpdb->prefix."posts";
+        $table_postmeta = $wpdb->prefix."postmeta";
+        $data = array(
+            'post_author' => 1,
+            'post_date' => date('Y-m-d H:i:s'),
+            'post_date_gmt' => date('Y-m-d H:i:s'),
+            'post_content' => manusoft_cf2pdf_get_medico_content(),
+            'post_title' => 'Datos Médicos',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+            'post_name' => 'datos-medicos',
+            'post_modified' => date('Y-m-d H:i:s'),
+            'post_modified_gmt' => date('Y-m-d H:i:s'),
+            'guid' => '',
+            'post_type' => 'wpcf7_contact_form'
+        );
+        $where = array ( 'ID' => $medico_id );
+        $update_result = $wpdb->update($table_post,$data,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error en la actualización del formulario 'Datos Médicos'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => ''
+        );
+        $where = array (
+            'meta_key' => '_additional_settings',
+            'post_id' => $medico_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_additional_settings' en postmeta para 'Datos Médicos'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'es_ES'
+        );
+        $where = array (
+            'meta_key' => '_locale',
+            'post_id' => $medico_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_locale' en postmeta para 'Datos Médicos'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'a:23:{s:12:"mail_sent_ok";s:44:"Muchas gracias por rellenar este formulario.";s:12:"mail_sent_ng";s:88:"Hubo un error intentando enviar el formulario. Por favor inténtelo de nuevo más tarde.";s:16:"validation_error";s:74:"Uno o más campos tienen un error. Por favor revise e inténtelo de nuevo.";s:4:"spam";s:85:"Hubo un error intentando enviar tu mensaje. Por favor inténtalo de nuevo más tarde.";s:12:"accept_terms";s:71:"Debe aceptar los términos y condiciones antes de enviar el formulario.";s:16:"invalid_required";s:24:"El campo es obligatorio.";s:16:"invalid_too_long";s:28:"El campo es demasiado largo.";s:17:"invalid_too_short";s:28:"El campo es demasiado corto.";s:12:"invalid_date";s:34:"El formato de fecha es incorrecto.";s:14:"date_too_early";s:50:"La fecha es anterior a la más temprana permitida.";s:13:"date_too_late";s:50:"La fecha es posterior a la más tardía permitida.";s:13:"upload_failed";s:46:"Hubo un error desconocido subiendo el archivo.";s:24:"upload_file_type_invalid";s:51:"No tiene permisos para subir archivos de este tipo.";s:21:"upload_file_too_large";s:31:"El archivo es demasiado grande.";s:23:"upload_failed_php_error";s:43:"Se ha producido un error subiendo la imagen";s:14:"invalid_number";s:36:"El formato de número no es válido.";s:16:"number_too_small";s:45:"El número es menor que el mínimo permitido.";s:16:"number_too_large";s:45:"El número es mayor que el máximo permitido.";s:23:"quiz_answer_not_correct";s:44:"La respuesta al cuestionario no es correcta.";s:17:"captcha_not_match";s:37:"El código introducido es incorrecto.";s:13:"invalid_email";s:70:"La dirección de correo electrónico que ha introducido no es válida.";s:11:"invalid_url";s:21:"La URL no es válida.";s:11:"invalid_tel";s:38:"El número de teléfono no es válido.";}'
+        );
+        $where = array (
+            'meta_key' => '_messages',
+            'post_id' => $medico_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_messages' en postmeta para 'Datos Médicos'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'a:9:{s:6:"active";b:0;s:7:"subject";s:0:"";s:6:"sender";s:0:"";s:9:"recipient";s:0:"";s:4:"body";s:0:"";s:18:"additional_headers";s:0:"";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}'
+        );
+        $where = array (
+            'meta_key' => '_mail_2',
+            'post_id' => $medico_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_mail_2' en postmeta para 'Datos Médicos'");
+        }
+        
+        $form = manusoft_cf2pdf_get_medico_form();
+        $data_postmeta = array(
+            'meta_value' => $form
+        );
+        $where = array (
+            'meta_key' => '_form',
+            'post_id' => $medico_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_form' en postmeta para 'Datos Médicos'");
+        }
+        
+        $mail = manusoft_cf2pdf_get_medico_mail();
+        $data_postmeta = array(
+            'meta_value' => $mail
+        );
+        $where = array (
+            'meta_key' => '_mail',
+            'post_id' => $medico_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_mail' en postmeta para 'Datos Médicos'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'medico'
+        );
+        $where = array (
+            'meta_key' => '_manusoft_form_type',
+            'post_id' => $medico_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_manusoft_form_type' en postmeta para 'Datos Médicos'");
+        }
+    } else {
+        manusoft_cf2pdf_create_medico_form();
+    }
 }
 
 function manusoft_cf2pdf_get_medico_content() {
@@ -1221,20 +1733,30 @@ function manusoft_cf2pdf_get_medico_form() {
 
 function manusoft_cf2pdf_get_medico_mail() {
     $config_data = manusoft_cf2pdf_get_cofig_data();
-    $email = "
-                a:9:{s:6:\"active\";b:1;s:7:\"subject\";s:14:\"Datos Médicos\";s:6:\"sender\";s:32:\"".$config_data['email_grupo']."\";s:9:\"recipient\";s:32:\"".$config_data['email_grupo']."\";s:4:\"body\";s:211:\"Nombre: [nombre]
-                Fecha de cumplimentación: [fecha_cumplimentacion]
-                
-                ------------------------------------
-                
-                Este correo ha sido enviado desde el formulario de la web de ".strtoupper($config_data['nombre_grupo'])." ".get_site_url()."\";s:18:\"additional_headers\";s:0:\"\";s:11:\"attachments\";s:0:\"\";s:8:\"use_html\";b:0;s:13:\"exclude_blank\";b:0;}
-    ";
+    $email_array = array(
+        'active' => 1,
+        'subject' => "Datos Médicos",
+        'sender' => $config_data['email_grupo'],
+        'recipient' => $config_data['email_grupo'],
+        'body' => "Nombre: [nombre]
+Fecha de cumplimentación: [fecha_cumplimentacion]
+
+------------------------------------
+
+Este correo ha sido enviado desde el formulario de la web de ".strtoupper($config_data['nombre_grupo'])." ".get_site_url(),
+        'additional_headers' => "",
+        'attachments' => "",
+        'use_html' => 0,
+        'exclude_blank' => 0
+    );
+    $email = serialize($email_array);
     return $email;
 }
 
 // Creación del formulario "Domiciliación Bancaria"
 function manusoft_cf2pdf_create_banco_form() {
     global $wpdb;
+    $check_error = false;
     $table_post = $wpdb->prefix."posts";
     $table_postmeta = $wpdb->prefix."postmeta";
     $data = array(
@@ -1253,6 +1775,10 @@ function manusoft_cf2pdf_create_banco_form() {
     );
     $insert_result = $wpdb->insert($table_post,$data);
     $id = $wpdb->insert_id;
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error en la creación del formulario 'Domiciliación Bancaria'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -1260,6 +1786,10 @@ function manusoft_cf2pdf_create_banco_form() {
         'meta_value' => ''
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_additional_settings' en postmeta para 'Domiciliación Bancaria'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -1267,6 +1797,10 @@ function manusoft_cf2pdf_create_banco_form() {
         'meta_value' => 'es_ES'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_locale' en postmeta para 'Domiciliación Bancaria'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -1274,6 +1808,10 @@ function manusoft_cf2pdf_create_banco_form() {
         'meta_value' => 'a:23:{s:12:"mail_sent_ok";s:44:"Muchas gracias por rellenar este formulario.";s:12:"mail_sent_ng";s:88:"Hubo un error intentando enviar el formulario. Por favor inténtelo de nuevo más tarde.";s:16:"validation_error";s:74:"Uno o más campos tienen un error. Por favor revise e inténtelo de nuevo.";s:4:"spam";s:85:"Hubo un error intentando enviar tu mensaje. Por favor inténtalo de nuevo más tarde.";s:12:"accept_terms";s:71:"Debe aceptar los términos y condiciones antes de enviar el formulario.";s:16:"invalid_required";s:24:"El campo es obligatorio.";s:16:"invalid_too_long";s:28:"El campo es demasiado largo.";s:17:"invalid_too_short";s:28:"El campo es demasiado corto.";s:12:"invalid_date";s:34:"El formato de fecha es incorrecto.";s:14:"date_too_early";s:50:"La fecha es anterior a la más temprana permitida.";s:13:"date_too_late";s:50:"La fecha es posterior a la más tardía permitida.";s:13:"upload_failed";s:46:"Hubo un error desconocido subiendo el archivo.";s:24:"upload_file_type_invalid";s:51:"No tiene permisos para subir archivos de este tipo.";s:21:"upload_file_too_large";s:31:"El archivo es demasiado grande.";s:23:"upload_failed_php_error";s:43:"Se ha producido un error subiendo la imagen";s:14:"invalid_number";s:36:"El formato de número no es válido.";s:16:"number_too_small";s:45:"El número es menor que el mínimo permitido.";s:16:"number_too_large";s:45:"El número es mayor que el máximo permitido.";s:23:"quiz_answer_not_correct";s:44:"La respuesta al cuestionario no es correcta.";s:17:"captcha_not_match";s:37:"El código introducido es incorrecto.";s:13:"invalid_email";s:70:"La dirección de correo electrónico que ha introducido no es válida.";s:11:"invalid_url";s:21:"La URL no es válida.";s:11:"invalid_tel";s:38:"El número de teléfono no es válido.";}'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_messages' en postmeta para 'Domiciliación Bancaria'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -1281,6 +1819,10 @@ function manusoft_cf2pdf_create_banco_form() {
         'meta_value' => 'a:9:{s:6:"active";b:0;s:7:"subject";s:0:"";s:6:"sender";s:0:"";s:9:"recipient";s:0:"";s:4:"body";s:0:"";s:18:"additional_headers";s:0:"";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_mail_2' en postmeta para 'Domiciliación Bancaria'");
+    }
     
     $form = manusoft_cf2pdf_get_banco_form();
     $data_postmeta = array(
@@ -1289,6 +1831,10 @@ function manusoft_cf2pdf_create_banco_form() {
         'meta_value' => $form
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_form' en postmeta para 'Domiciliación Bancaria'");
+    }
     
     $mail = manusoft_cf2pdf_get_banco_mail();
     $data_postmeta = array(
@@ -1297,6 +1843,10 @@ function manusoft_cf2pdf_create_banco_form() {
         'meta_value' => $mail
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_mail' en postmeta para 'Domiciliación Bancaria'");
+    }
     
     $data_postmeta = array(
         'post_id' => $id,
@@ -1304,6 +1854,136 @@ function manusoft_cf2pdf_create_banco_form() {
         'meta_value' => 'banco'
     );
     $insert_result = $wpdb->insert($table_postmeta,$data_postmeta);
+    if ($insert_result === false) {
+        $check_error = true;
+        manusoft_cf2pdf_error_log("Error al insertar el registro '_manusoft_form_type' en postmeta para 'Domiciliación Bancaria'");
+    }
+}
+
+// Actualización del formulario "Domiciliación Bancaria"
+function manusoft_cf2pdf_update_banco_form() {
+    $banco_id = manusoft_cf2pdf_get_default_id_form('banco');
+    if ($banco_id != NULL) {
+        global $wpdb;
+        $check_error = false;
+        $table_post = $wpdb->prefix."posts";
+        $table_postmeta = $wpdb->prefix."postmeta";
+        $data = array(
+            'post_author' => 1,
+            'post_date' => date('Y-m-d H:i:s'),
+            'post_date_gmt' => date('Y-m-d H:i:s'),
+            'post_content' => manusoft_cf2pdf_get_banco_content(),
+            'post_title' => 'Domiciliación Bancaria',
+            'comment_status' => 'closed',
+            'ping_status' => 'closed',
+            'post_name' => 'domiciliacion-bancaria',
+            'post_modified' => date('Y-m-d H:i:s'),
+            'post_modified_gmt' => date('Y-m-d H:i:s'),
+            'guid' => '',
+            'post_type' => 'wpcf7_contact_form'
+        );
+        $where = array ( 'ID' => $banco_id );
+        $update_result = $wpdb->update($table_post,$data,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error en la actualización del formulario 'Domiciliación Bancaria'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => ''
+        );
+        $where = array (
+            'meta_key' => '_additional_settings',
+            'post_id' => $banco_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_additional_settings' en postmeta para 'Domiciliación Bancaria'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'es_ES'
+        );
+        $where = array (
+            'meta_key' => '_locale',
+            'post_id' => $banco_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_locale' en postmeta para 'Domiciliación Bancaria'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'a:23:{s:12:"mail_sent_ok";s:44:"Muchas gracias por rellenar este formulario.";s:12:"mail_sent_ng";s:88:"Hubo un error intentando enviar el formulario. Por favor inténtelo de nuevo más tarde.";s:16:"validation_error";s:74:"Uno o más campos tienen un error. Por favor revise e inténtelo de nuevo.";s:4:"spam";s:85:"Hubo un error intentando enviar tu mensaje. Por favor inténtalo de nuevo más tarde.";s:12:"accept_terms";s:71:"Debe aceptar los términos y condiciones antes de enviar el formulario.";s:16:"invalid_required";s:24:"El campo es obligatorio.";s:16:"invalid_too_long";s:28:"El campo es demasiado largo.";s:17:"invalid_too_short";s:28:"El campo es demasiado corto.";s:12:"invalid_date";s:34:"El formato de fecha es incorrecto.";s:14:"date_too_early";s:50:"La fecha es anterior a la más temprana permitida.";s:13:"date_too_late";s:50:"La fecha es posterior a la más tardía permitida.";s:13:"upload_failed";s:46:"Hubo un error desconocido subiendo el archivo.";s:24:"upload_file_type_invalid";s:51:"No tiene permisos para subir archivos de este tipo.";s:21:"upload_file_too_large";s:31:"El archivo es demasiado grande.";s:23:"upload_failed_php_error";s:43:"Se ha producido un error subiendo la imagen";s:14:"invalid_number";s:36:"El formato de número no es válido.";s:16:"number_too_small";s:45:"El número es menor que el mínimo permitido.";s:16:"number_too_large";s:45:"El número es mayor que el máximo permitido.";s:23:"quiz_answer_not_correct";s:44:"La respuesta al cuestionario no es correcta.";s:17:"captcha_not_match";s:37:"El código introducido es incorrecto.";s:13:"invalid_email";s:70:"La dirección de correo electrónico que ha introducido no es válida.";s:11:"invalid_url";s:21:"La URL no es válida.";s:11:"invalid_tel";s:38:"El número de teléfono no es válido.";}'
+        );
+        $where = array (
+            'meta_key' => '_messages',
+            'post_id' => $banco_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_messages' en postmeta para 'Domiciliación Bancaria'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'a:9:{s:6:"active";b:0;s:7:"subject";s:0:"";s:6:"sender";s:0:"";s:9:"recipient";s:0:"";s:4:"body";s:0:"";s:18:"additional_headers";s:0:"";s:11:"attachments";s:0:"";s:8:"use_html";b:0;s:13:"exclude_blank";b:0;}'
+        );
+        $where = array (
+            'meta_key' => '_mail_2',
+            'post_id' => $banco_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_mail_2' en postmeta para 'Domiciliación Bancaria'");
+        }
+        
+        $form = manusoft_cf2pdf_get_banco_form();
+        $data_postmeta = array(
+            'meta_value' => $form
+        );
+        $where = array (
+            'meta_key' => '_form',
+            'post_id' => $banco_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_form' en postmeta para 'Domiciliación Bancaria'");
+        }
+        
+        $mail = manusoft_cf2pdf_get_banco_mail();
+        $data_postmeta = array(
+            'meta_value' => $mail
+        );
+        $where = array (
+            'meta_key' => '_mail',
+            'post_id' => $banco_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_mail' en postmeta para 'Domiciliación Bancaria'");
+        }
+        
+        $data_postmeta = array(
+            'meta_value' => 'banco'
+        );
+        $where = array (
+            'meta_key' => '_manusoft_form_type',
+            'post_id' => $banco_id
+        );
+        $update_result = $wpdb->update($table_postmeta,$data_postmeta,$where);
+        if ($update_result === false) {
+            $check_error = true;
+            manusoft_cf2pdf_error_log("Error al actualizar el registro '_manusoft_form_type' en postmeta para 'Domiciliación Bancaria'");
+        }
+    } else {
+        manusoft_cf2pdf_create_banco_form();
+    }
 }
 
 function manusoft_cf2pdf_get_banco_content() {
@@ -1325,12 +2005,12 @@ function manusoft_cf2pdf_get_banco_content() {
                         </div>
                         <div class=\"row\">
                             <div class=\"col-md-12\" style=\"margin-bottom:30px;\">
-                                <p style=\"color:red;\">El importe es el resultado de multiplicar 15 € (cuota de miembro del grupo) por el número de miembros que pertenecen al grupo.</p>
+                                <p style=\"color:red;\">El importe es el resultado de multiplicar ".$config_data['cuota']." € (cuota de miembro del grupo) por el número de miembros que pertenecen al grupo.</p>
                             </div>
                         </div>
                         <div class=\"row\">
                             <div class=\"col-md-12\" style=\"margin-bottom:30px;\">
-                                <label>Importe (periodicidad mensual):</label>
+                                <label>Importe (periodicidad ".strtoupper($config_data['periodicidad'])."):</label>
                                 [number* importe]
                             </div>
                         </div>
@@ -1445,12 +2125,12 @@ function manusoft_cf2pdf_get_banco_form() {
                     </div>
                     <div class=\"row\">
                         <div class=\"col-md-12\" style=\"margin-bottom:30px;\">
-                            <p style=\"color:red;\">El importe es el resultado de multiplicar 15 € (cuota de miembro del grupo) por el número de miembros que pertenecen al grupo.</p>
+                            <p style=\"color:red;\">El importe es el resultado de multiplicar ".$config_data['cuota']." € (cuota de miembro del grupo) por el número de miembros que pertenecen al grupo.</p>
                         </div>
                     </div>
                     <div class=\"row\">
                         <div class=\"col-md-12\" style=\"margin-bottom:30px;\">
-                            <label>Importe (periodicidad mensual):</label>
+                            <label>Importe (periodicidad ".strtoupper($config_data['periodicidad'])."):</label>
                             [number* importe]
                         </div>
                     </div>
@@ -1501,16 +2181,25 @@ function manusoft_cf2pdf_get_banco_form() {
 
 function manusoft_cf2pdf_get_banco_mail() {
     $config_data = manusoft_cf2pdf_get_cofig_data();
-    $email = "
-                a:9:{s:6:\"active\";b:1;s:7:\"subject\";s:23:\"Domiciliación Bancaria\";s:6:\"sender\";s:32:\"".$config_data['email_grupo']."\";s:9:\"recipient\";s:32:\"".$config_data['email_grupo']."\";s:4:\"body\";s:222:\"Familia: [familia]
-                Importe: [importe]
-                Num. Cuenta: [num_cuenta]
-                Fecha: [fecha]
-                
-                ------------------------------------
-                
-                Este correo ha sido enviado desde el formulario de la web de ".strtoupper($config_data['nombre_grupo'])." ".get_site_url()."\";s:18:\"additional_headers\";s:0:\"\";s:11:\"attachments\";s:0:\"\";s:8:\"use_html\";b:0;s:13:\"exclude_blank\";b:0;}
-    ";
+    $email_array = array(
+        'active' => 1,
+        'subject' => "Domiciliación Bancaria",
+        'sender' => $config_data['email_grupo'],
+        'recipient' => $config_data['email_grupo'],
+        'body' => "Familia: [familia]
+Importe: [importe] €
+Num. Cuenta: [num_cuenta]
+Fecha: [fecha]
+
+------------------------------------
+
+Este correo ha sido enviado desde el formulario de la web de ".strtoupper($config_data['nombre_grupo'])." ".get_site_url(),
+        'additional_headers' => "",
+        'attachments' => "",
+        'use_html' => 0,
+        'exclude_blank' => 0
+    );
+    $email = serialize($email_array);
     return $email;
 }
 ?>

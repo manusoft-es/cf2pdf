@@ -51,7 +51,9 @@ function manusoft_cf2pdf_create_config_table() {
               direccion_grupo varchar(255) COLLATE 'utf8_spanish_ci' NOT NULL,
               poblacion_grupo varchar(255) COLLATE 'utf8_spanish_ci' NOT NULL,
               provincia_grupo varchar(255) COLLATE 'utf8_spanish_ci' NOT NULL,
-              cp_grupo int(6) unsigned NOT NULL
+              cp_grupo int(6) unsigned NOT NULL,
+              cuota int unsigned NOT NULL,
+              periodicidad varchar(255) COLLATE 'utf8_spanish_ci' NOT NULL
             ) ENGINE='InnoDB' COLLATE 'utf8_spanish_ci';";
     require_once( ABSPATH."wp-admin/includes/upgrade.php");
     dbDelta($sql);
@@ -105,5 +107,30 @@ function manusoft_cf2pdf_delete_data_table() {
     global $wpdb;
     $query = "DROP TABLE IF EXISTS ".$wpdb->prefix."manusoft_cf2pdf_data;";
     $wpdb->get_var($query);
+}
+
+/*
+ *  ##############################################################
+ *  ############################ LOG #############################
+ *  ##############################################################
+ */
+// Función para escribir en el log
+function manusoft_cf2pdf_error_log($texto) {
+    $log = fopen(plugin_dir_path(__FILE__).'log/errores_'.date("Ym").'.log','a');
+    fwrite($log,"[".date("r")."]: $texto\r\n");
+    fclose($log);
+}
+
+// Función para leer del log
+function manusoft_cf2pdf_get_error_log() {
+    if (file_exists(plugin_dir_path(__FILE__).'log/errores_'.date("Ym").'.log')) {
+        $log = file_get_contents(plugin_dir_path(__FILE__).'log/errores_'.date("Ym").'.log');
+        if ($log === false) {
+            $log = "Error al acceder al log";
+        }
+    } else {
+        $log = "No se han producido errores.";
+    }
+    return $log;
 }
 ?>

@@ -127,7 +127,7 @@ if (check_initial_config()) {
 									<label for="cif_grupo">CIF</label>
 								</th>
 								<td>
-									<input type="text" id="cif_grupo" name="cif_grupo" maxlength="9" size="9" class="regular-text" value="<?php echo $config_data['cif_grupo']; ?>" />
+									<input type="text" id="cif_grupo" name="cif_grupo" maxlength="9" size="9" style="width:auto;" class="regular-text" value="<?php echo $config_data['cif_grupo']; ?>" />
 									<span id="manusoft_cf2pdf_cif_grupo_messages"></span>
 									<p class="description" id="cif_grupo-description"><small>El CIF debe estar formado por una letra (A,B,C,D,E,F,G,H,J,K,L,M,N,P,Q,R,S,U,V,W) seguida de 7 dígitos y por otra letra (de la A a la J) o número al final. (Ejemplo: A1234567B o A12345678)</small></p>
 								</td>
@@ -173,8 +173,29 @@ if (check_initial_config()) {
 									<label for="cp_grupo">Código postal</label>
 								</th>
 								<td>
-									<input type="text" id="cp_grupo" name="cp_grupo" maxlength="5" size="5" class="regular-text" value="<?php echo $config_data['cp_grupo']; ?>" />
+									<input type="text" id="cp_grupo" name="cp_grupo" maxlength="5" size="5" style="width:auto;" class="regular-text" value="<?php echo $config_data['cp_grupo']; ?>" />
 									<span id="manusoft_cf2pdf_cp_grupo_messages"></span>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label for="cp_grupo">Cuota de miembro</label>
+								</th>
+								<td>
+									<input type="text" id="cuota" name="cuota" size="3" style="width:auto;" class="regular-text" value="<?php echo $config_data['cuota']; ?>" />€
+									<span id="manusoft_cf2pdf_cuota_messages"></span>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<label for="periodicidad">Periodicidad de la cuota</label>
+								</th>
+								<td>
+									<select id="periodicidad" name="periodicidad">
+										<option value="Mensual" <?php if ($config_data['periodicidad'] == "Mensual") { echo "selected"; } ?>>Mensual</option>
+										<option value="Anual" <?php if ($config_data['periodicidad'] == "Anual") { echo "selected"; } ?>>Anual</option>
+									</select>
+									<span id="manusoft_cf2pdf_periodicidad_messages"></span>
 								</td>
 							</tr>
 						</table>
