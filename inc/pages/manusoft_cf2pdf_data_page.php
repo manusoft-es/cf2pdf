@@ -8,7 +8,41 @@ if (!current_user_can('manage_options'))  {
     $DataListTable->prepare_items();
     
     if ($DataListTable->current_action() == "download_varios") {
-        echo var_dump($_GET['datas']);
+        session_start();
+        $_SESSION['start'] = "1";        
+        $index = 0;
+        foreach ($_GET['datas'] as $data) {
+            $_SESSION['data_varios'][$index] = unserialize(manusoft_cf2pdf_get_data_by_id($data)["form_value"]);
+            $index++;
+        }
+        $config = manusoft_cf2pdf_get_cofig_data();
+        if ($config != NULL) {
+            foreach ($config as $key => $value) {
+                $_SESSION['config'][$key] = $value;
+            }
+        }
+        $form_type = manusoft_cf2pdf_get_form_type($_GET['id']);
+        if ($form_type == NULL) {
+            echo "<script>
+                window.open('".plugins_url()."/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_default_template.php?varios=1', '_blank');
+              </script>";
+        } else if ($form_type == 'consentimiento') {
+            echo "<script>
+                window.open('".plugins_url()."/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_consentimiento_template.php?varios=1', '_blank');
+              </script>";
+        } else if ($form_type == 'banco') {
+            echo "<script>
+                window.open('".plugins_url()."/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_banco_template.php?varios=1', '_blank');
+              </script>";
+        } else if ($form_type == 'inscripcion') {
+            echo "<script>
+                window.open('".plugins_url()."/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_inscripcion_template.php?varios=1', '_blank');
+              </script>";
+        } else if ($form_type == 'medico') {
+            echo "<script>
+                window.open('".plugins_url()."/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_medico_template.php?varios=1', '_blank');
+              </script>";
+        }
     }
 ?>
 
@@ -17,7 +51,11 @@ if (!current_user_can('manage_options'))  {
 	<hr class="wp-header-end">
 	<div id="poststuff">
 		<span id="manusoft_cf2pdf_messages"></span>
-		<?php $DataListTable->display(); ?>
+        <form id="cfdb7-pdf-form" method="get">
+        	<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
+        	<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>" />
+			<?php $DataListTable->display(); ?>
+		</form>
 	</div>
 </div>
 

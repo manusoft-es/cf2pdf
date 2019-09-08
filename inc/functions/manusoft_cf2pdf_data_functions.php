@@ -29,6 +29,12 @@ function manusoft_cf2pdf_get_data($form_id, $per_page = 5, $page_number = 1) {
     return $results;
 }
 
+function manusoft_cf2pdf_get_data_by_id($data_id) {
+    global $wpdb;
+    $query = "SELECT * FROM ".$wpdb->prefix."manusoft_cf2pdf_data WHERE form_id = ".$data_id;
+    return $wpdb->get_row($query,"ARRAY_A");
+}
+
 function manusoft_cf2pdf_get_indexes($form_id) {
     global $wpdb;
     $query = "SELECT

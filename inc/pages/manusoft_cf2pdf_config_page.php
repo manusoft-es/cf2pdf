@@ -10,6 +10,7 @@ if (check_initial_config()) {
     $footer_text = $config_data['txt_inf'];
 }
 ?>
+<div id="manusoft_cf2pdf_cargando"></div>
 <div id="manusoft_cf2pdf_config" class="wrap">
 	<h1 class="wp-heading-inline">CF7 to PDF - Configuración</h1>
 	<hr class="wp-header-end">

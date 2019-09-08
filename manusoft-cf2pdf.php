@@ -117,7 +117,7 @@ function manusoft_cf2pdf_delete_data_table() {
 // Función para escribir en el log
 function manusoft_cf2pdf_error_log($texto) {
     $log = fopen(plugin_dir_path(__FILE__).'log/errores_'.date("Ym").'.log','a');
-    fwrite($log,"[".date("r")."]: $texto\r\n");
+    fwrite($log,"[".current_time('r')."]: $texto\r\n");
     fclose($log);
 }
 
@@ -133,4 +133,15 @@ function manusoft_cf2pdf_get_error_log() {
     }
     return $log;
 }
+
+/*
+ *  ##############################################################
+ *  ########################## SESSIONS ##########################
+ *  ##############################################################
+ */
+// Función que borra todas las sesiones al cerrar sesión
+function destroy_sessions() {
+    session_destroy();
+}
+add_action('wp_logout', 'destroy_sessions');
 ?>

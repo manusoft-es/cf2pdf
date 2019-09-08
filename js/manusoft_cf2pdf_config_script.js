@@ -2,6 +2,8 @@ jQuery(document).ready( function($) {
 	jQuery('#manusoft_cf2pdf_guardar_button').click(function(e) {
 	    e.preventDefault();
 	    
+	    jQuery("#manusoft_cf2pdf_cargando").show();
+	    
     	jQuery('input, textarea').css("border","none");
 
 	    var nombre_grupo = jQuery('#nombre_grupo').val();
@@ -140,6 +142,7 @@ jQuery(document).ready( function($) {
 		    }
 		    
 		    jQuery.get(ajaxurl,data,function(response) {
+			    jQuery("#manusoft_cf2pdf_cargando").hide();
 	    		if (response.data.result !== false) {
 	    			jQuery('#manusoft_cf2pdf_messages').html("<div class='notice notice-success'><p>La configuración se ha guardado correctamente.</p></div>");
 	    			setTimeout(location.reload.bind(location), 3000);
