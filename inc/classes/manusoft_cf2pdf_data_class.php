@@ -128,7 +128,7 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
                     return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_medico_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
                 }
             case 'delete':
-                return sprintf('<a href="?page=%s&action=%s&id=%s&data_id=%s&paged=%s">Eliminar</a>',$_REQUEST['page'],'delete',$_GET['id'],$item['form_id'],$this->get_pagenum());
+                return sprintf('<a class="delete_link" href="?page=%s&action=%s&id=%s&data_id=%s&paged=%s">Eliminar</a>',$_REQUEST['page'],'delete',$_GET['id'],$item['form_id'],$this->get_pagenum());
             case $column_name:
                 if (is_array($item[$column_name])) {
                     return implode(",",$item[$column_name]);

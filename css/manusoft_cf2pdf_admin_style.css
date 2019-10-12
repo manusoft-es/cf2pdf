@@ -84,3 +84,11 @@ div .manusoft_cf2pdf_image_input {
     border-color: #c3e6cb;
     border-left-color: #46b450;
 }
+
+a.delete_link {
+	color: red;
+}
+
+a.delete_link:hover {
+	color: red;
+}
