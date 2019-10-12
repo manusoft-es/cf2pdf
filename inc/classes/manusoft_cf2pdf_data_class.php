@@ -56,6 +56,7 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
             $columns['firma'] = '<b>Firma</b>';
         }
         $columns['download'] = '<b>Descargar</b>';
+        $columns['delete'] = '<b>Eliminar</b>';
         return $columns;
     }
     
@@ -126,6 +127,8 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
                 } else if ($form_type == 'medico') {
                     return '<a href="'.plugins_url().'/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_medico_template.php?id='.$item['form_id'].'" target="_blank">Descargar en PDF</a>';
                 }
+            case 'delete':
+                return sprintf('<a href="?page=%s&action=%s&id=%s&data_id=%s&paged=%s">Eliminar</a>',$_REQUEST['page'],'delete',$_GET['id'],$item['form_id'],$this->get_pagenum());
             case $column_name:
                 if (is_array($item[$column_name])) {
                     return implode(",",$item[$column_name]);
@@ -136,8 +139,8 @@ class manusoft_cf2pdf_data_list_table extends WP_List_Table {
                         return $item[$column_name];
                     }
                 }
-                default:
-                    return print_r($item,true); //Show the whole array for troubleshooting purposes
+            default:
+                return print_r($item,true); //Show the whole array for troubleshooting purposes
         }
     }
 }

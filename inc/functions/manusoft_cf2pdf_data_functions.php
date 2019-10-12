@@ -35,6 +35,18 @@ function manusoft_cf2pdf_get_data_by_id($data_id) {
     return $wpdb->get_row($query,"ARRAY_A");
 }
 
+function manusoft_cf2pdf_delete_data($data_id) {
+    global $wpdb;
+    $table = $wpdb->prefix.'manusoft_cf2pdf_data';
+    $res = $wpdb->delete($table, array('form_id' => $data_id));
+    
+    if ($res == 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 function manusoft_cf2pdf_get_indexes($form_id) {
     global $wpdb;
     $query = "SELECT

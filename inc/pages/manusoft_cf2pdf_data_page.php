@@ -43,6 +43,14 @@ if (!current_user_can('manage_options'))  {
                 window.open('".plugins_url()."/manusoft-cf2pdf/pdf-templates/manusoft_cf2pdf_medico_template.php?varios=1', '_blank');
               </script>";
         }
+    } else if (isset($_GET['action']) && $_GET['action'] = 'delete') {
+        $delete_result = manusoft_cf2pdf_delete_data($_GET['data_id']);
+        if ($delete_result) {
+            $delete_message = "<div class='notice manusoft_cf2pdf_updated'>El registro se ha eliminado correctamente.</div>";
+        } else {
+            $delete_message = "<div class='notice manusoft_cf2pdf_error'>Ha ocurrido un error eliminado el registro. Inténtalo de nuevo más tarde.</div>";
+        }
+        $DataListTable->prepare_items();
     }
 ?>
 
@@ -50,7 +58,7 @@ if (!current_user_can('manage_options'))  {
 	<h1 class="wp-heading-inline">CF7 to PDF - Registros</h1>
 	<hr class="wp-header-end">
 	<div id="poststuff">
-		<span id="manusoft_cf2pdf_messages"></span>
+		<span id="manusoft_cf2pdf_messages"><?php if (isset($delete_message)) { echo $delete_message; } ?></span>
         <form id="cfdb7-pdf-form" method="get">
         	<input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
         	<input type="hidden" name="id" value="<?php echo $_GET['id'] ?>" />
