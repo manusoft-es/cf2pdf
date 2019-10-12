@@ -91,8 +91,8 @@ function manusoft_cf2pdf_create_data_table() {
 // Método a ejecutar al desactivar el plugin
 register_deactivation_hook( __FILE__, 'manusoft_cf2pdf_desactivacion' );
 function manusoft_cf2pdf_desactivacion() {
-    manusoft_cf2pdf_delete_config_table();
-    manusoft_cf2pdf_delete_data_table();
+    //manusoft_cf2pdf_delete_config_table();
+    //manusoft_cf2pdf_delete_data_table();
 }
 
 // Borrado de tabla con los datos de configuración

@@ -229,7 +229,7 @@ if (isset($_SESSION['start'])) {
         			<div class="firma">
         				<p style="margin-left:10%;">Fdo: <?php echo $nombre_padre; ?></p>
         				<div class="firma" style="text-align:center;">
-        					<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" />
+        					<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" style="max-width:250px;" />
         				</div>
         			</div>
         		</div>
@@ -468,7 +468,7 @@ if (isset($_SESSION['start'])) {
             			<div class="firma">
             				<p style="margin-left:10%;">Fdo: <?php echo $nombre_padre; ?></p>
             				<div class="firma" style="text-align:center;">
-            					<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" />
+            					<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" style="max-width:250px;" />
             				</div>
             			</div>
             		</div>

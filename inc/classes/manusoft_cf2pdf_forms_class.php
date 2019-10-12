@@ -22,7 +22,7 @@ class manusoft_cf2pdf_forms_list_table extends WP_List_Table {
     function prepare_items() {
         $columns = $this->get_columns();
         $hidden = array();
-        $perPage = 5;
+        $perPage = 10;
         $currentPage = $this->get_pagenum();
         $count_forms = wp_count_posts('wpcf7_contact_form');
         $totalItems  = $count_forms->publish;

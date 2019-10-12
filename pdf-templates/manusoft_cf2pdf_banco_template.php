@@ -183,7 +183,7 @@ if (isset($_SESSION['start'])) {
         				</p>
         				<div class="firma" style="text-align:center; margin-left:15%;">
         					<?php if ($firma != "" ) { ?>
-        					<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" />
+        					<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" style="max-width:250px;" />
         					<?php } ?>
         				</div>
         				<p style="font-size:18px; text-align:center;">
@@ -380,7 +380,7 @@ if (isset($_SESSION['start'])) {
             				</p>
             				<div class="firma" style="text-align:center; margin-left:15%;">
             					<?php if ($firma != "" ) { ?>
-            					<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" />
+            					<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" style="max-width:250px;" />
             					<?php } ?>
             				</div>
             				<p style="font-size:18px; text-align:center;">

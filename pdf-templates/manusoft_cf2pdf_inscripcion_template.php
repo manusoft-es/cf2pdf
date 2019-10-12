@@ -243,7 +243,7 @@ if (isset($_SESSION['start'])) {
     				<div class="firma" style="margin-top:5%;">
     					<p style="margin-left:10%;">Fdo: <?php if ($nombre_padre != "") { echo $nombre_padre; } else { echo $nombre_madre; } ?></p>
     					<div class="firma" style="text-align:center;">
-    						<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" />
+    						<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" style="max-width:250px;" />
     					</div>
     				</div>
     			</div>
@@ -497,7 +497,7 @@ if (isset($_SESSION['start'])) {
             				<div class="firma" style="margin-top:5%;">
             					<p style="margin-left:10%;">Fdo: <?php if ($nombre_padre != "") { echo $nombre_padre; } else { echo $nombre_madre; } ?></p>
             					<div class="firma" style="text-align:center;">
-            						<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" />
+            						<img src="<?php echo str_replace("&#047;", "/", $firma); ?>" style="max-width:250px;" />
             					</div>
             				</div>
             			</div>
